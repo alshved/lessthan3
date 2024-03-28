@@ -6,7 +6,7 @@ import uvicorn
 
 app = FastAPI()
 
-app.mount("/static", StaticFiles(directory="D:\\vueproject1\\api\\.venv\\Scripts"))
+app.mount("/", StaticFiles(directory="static", html=True), name="static")
 
 
 # для тестирования использовать Chrome, другие браузеры как то странно кэшируют файлы с кодом и не обновляют их
@@ -15,6 +15,7 @@ def test():
     return HTMLResponse(content="<h2>this is test post request</h2>")
 
 
+# cntrl + shift + r чтобы обновить
 @app.put("/test")
 def get_info(data=Body()):
     print("received put request from front. Request info:")
@@ -22,9 +23,9 @@ def get_info(data=Body()):
     return data
 
 
-@app.get("/")
-def root():
-    return FileResponse("index.html")
+# @app.get("/")
+# def root():
+#     return FileResponse("index.html")
 
 
 @app.get("/StyleSheet.css")
