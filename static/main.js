@@ -16,7 +16,7 @@ function send() {
         })
     })
 }
-
+fetch("/static", {method: "GET"});
 console.log("SSSs");
 const submit_btn = document.getElementById("submit-btn");
 submit_btn.addEventListener("click", send);

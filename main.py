@@ -5,14 +5,9 @@ from fastapi.staticfiles import StaticFiles
 import uvicorn
 
 app = FastAPI()
-
-app.mount("/", StaticFiles(directory="static", html=True), name="static")
-
+app.mount("/static", StaticFiles(directory="static", html=True), name="static")
 
 # для тестирования использовать Chrome, другие браузеры как то странно кэшируют файлы с кодом и не обновляют их
-@app.post("/test")
-def test():
-    return HTMLResponse(content="<h2>this is test post request</h2>")
 
 
 # cntrl + shift + r чтобы обновить
@@ -23,23 +18,20 @@ def get_info(data=Body()):
     return data
 
 
-# @app.get("/")
-# def root():
-#     return FileResponse("index.html")
+@app.get("/")
+def root():
+    return FileResponse("static/index.html")
 
 
-@app.get("/StyleSheet.css")
-def get_css():
-    return FileResponse("StyleSheet.css")
-
-
-@app.get("/main.js")
-def get_js():
-    print("s")
-    return FileResponse("main.js")
+# @app.get("/StyleSheet.css")
+# def get_css():
+#     return FileResponse("StyleSheet.css")#
+# @app.get("/main.js")
+# def get_js():
+#     print("s")
+#     return FileResponse("main.js")
 
 
 if __name__ == "__main__":
-    # поставить reload=True для обновления страницы при обновлении
-    # кода во время разработки
+    # поставить reload=False для прода
     uvicorn.run("main:app", reload=True)
