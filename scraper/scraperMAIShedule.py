@@ -31,7 +31,7 @@ class SheduleScraperMAI:
         driver = self._driver
         driver.get(self.url)
         btn_institute = driver.find_element(By.ID, 'department')
-        btn_institute.send_keys(f'Институт №{str(inst)}')
+        btn_institute.send_keys(f'Институт №{inst}')
         btn_course = driver.find_element(By.ID, 'course')
         btn_course.send_keys(course)
         btn_submit = driver.find_element(By.ID, 'student')
@@ -46,7 +46,6 @@ class SheduleScraperMAI:
         :param required_group: номер группы
         :param required_week: неделя в формате ДД.ММ.ГГ-ДД.ММ.ГГ
         """
-        print(required_inst, required_course)
         self.__go_to_groups_page__(required_course, required_inst)
         driver = self._driver
         groups_elements = driver.find_element(By.ID, 'nav-1-eg1')
@@ -62,11 +61,12 @@ class SheduleScraperMAI:
 
         choose_week_btn.send_keys('\n')
         weeks_elements_container = driver.find_element(By.CSS_SELECTOR, '.list-group.list-group-striped.list-group-sm')
-        weeks_elements = weeks_elements_container.find_elements(By.CSS_SELECTOR, 'li')
+        weeks_els = weeks_elements_container.find_elements(By.CSS_SELECTOR, 'li')
         weeks_identificators = dict()
-        for element in weeks_elements:
-            week_id = element.find_element(By.CSS_SELECTOR, ':last-child').text.replace(' ', '')
-            weeks_identificators[week_id] = element
+        for i in range(len(weeks_els)):
+            week_id = weeks_els[i].find_element(By.CSS_SELECTOR, ':last-child').text.replace(' ', '')
+            weeks_identificators[week_id] = weeks_els[i]
+            weeks_identificators[str(i + 1)] = weeks_els[i]
 
         if required_week:
             req_week_btn = weeks_identificators[required_week].find_elements(By.TAG_NAME, 'a')
@@ -76,7 +76,7 @@ class SheduleScraperMAI:
         if req_week_btn:
             req_week_btn[0].send_keys('\n')
 
-    def scrap_by_group_and_week(self, inst: int, group: str, week: str, course: str, try_cache=True):
+    def scrap_by_group_and_week(self, inst: str, course: str, group: str, week: str, try_cache=True):
         """
         Скрапит информацию с сайта
         :param int inst: номер института
@@ -88,15 +88,17 @@ class SheduleScraperMAI:
         """
 
         data_path = path.join(self.cache_dir, f'{inst}i{course}c{group}g{week}w.json')
+        answer = {'file_name': f'{inst}i{course}c{group}g{week}w.json', 'file_path': data_path, 'data': {}}
         if try_cache and path.exists(data_path):
             with open(data_path, 'r', encoding='utf-8') as fp:
                 res = json.load(fp)
-            return res
+            answer['data'] = res
+            return answer
         else:
             self._driver = webdriver.Chrome()
             driver = self._driver
             driver.get(self.url)
-            self.__go_to_week_page(required_group=group, required_week=week, required_inst=str(inst),
+            self.__go_to_week_page(required_group=group, required_week=week, required_inst=inst,
                                    required_course=course)
             res = dict()
             days_elements = driver.find_elements(By.CLASS_NAME, 'step-content')
@@ -135,7 +137,8 @@ class SheduleScraperMAI:
             with open(data_path, 'w', encoding='utf-8') as fp:
                 json.dump(res, fp, ensure_ascii=False, indent=2)
         driver.quit()
-        return res
+        answer['data'] = res
+        return answer
 
     def scrap_available_institutes(self, try_cache=True):
         """
@@ -243,3 +246,7 @@ class SheduleScraperMAI:
     #                 for week in available_weeks:
     #                     print(inst, course, g, week)
     #                     self.scrap_by_group_and_week(inst, g, week, course, try_cache=True)
+
+
+# s = SheduleScraperMAI('https://mai.ru/education/studies/schedule/')
+# ans = s.scrap_by_group_and_week("8", "1", "М8О-110Б-23", "1")
