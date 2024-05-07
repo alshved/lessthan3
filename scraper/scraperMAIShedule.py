@@ -17,7 +17,10 @@ class SheduleScraperMAI:
         """
 
         self.url = url
-        self.cache_dir = cache_dir
+        if cache_dir is None:
+            self.cache_dir = ''
+        else:
+            self.cache_dir = cache_dir
         self._driver = webdriver.Chrome()
 
     def __go_to_groups_page__(self, course: str, inst: str):
