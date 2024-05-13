@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Расписание it этажа</title>
+<style>
+
+    body {
+        height: 100vh; 
+        margin: auto;
+        padding: auto; 
+        background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+        background-size: 400% 400%;
+        animation: gradientBG 15s ease infinite;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #000;
+    } 
+
+    .container {
+        background-color: #ffffff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        width: 400px;
+        margin: auto;
+        border-radius: 8px;
+    }
+
+    .button {
+        background-color: #5c4caf; 
+        border: none;
+        color: #ffffff;
+        padding: 10px 15px;
+        margin: 10px 0;
+        border-radius: 4px;
+        display: block;
+        width: 100%;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    select, input[type="date"] {
+        width: 100%;
+        padding: 8px;
+        border-radius: 4px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        display: block;
+    }
+
+    #output {
+        color: #333;
+        font-size: 16px;
+        margin-top: 20px;
+        text-align: center;
+        background-color: #e8e8e8;
+        padding: 10px;
+        border-radius: 4px;
+    }
+
+    .image-container img {
+        max-width: 100%;
+        display: block;
+        margin-top: 20px;
+        border-radius: 8px;
+    }
+
+    .first-cat-gif {
+        position: absolute;
+        top: 200px;
+        left: 100px;
+        width: 300px;
+    }
+    
+    .second-cat-gif {
+        position: absolute;
+        top: 200px;
+        right: 100px;
+        width: 300px;
+    }
+    
+    @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+</style>
+</head>
+<body>
+<img src="https://steamuserimages-a.akamaihd.net/ugc/1764867659370342290/F00DB771366F45154B078E4CBA178C8AF9D4C73C/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false" alt="Комару" class="second-cat-gif">
+<img src="https://media.tenor.com/dC4ZMxQV4DcAAAAi/peach-goma.gif" alt="Animated Cat" class="first-cat-gif">
+<div class="container">
+    <h1>Расписание занятий</h1>
+    <button class="button" onclick="toggleCabinetSelect()">Выбрать кабинет</button>
+    <button class="button" onclick="showDatePicker()">Выбрать дату</button>
+    <button class="button" onclick="addPair()">Добавить пару</button>
+    <button class="button" onclick="dellPair()">Удалить пару</button>
+    <select id="cabinetSelect" style="display:none;" onchange="updateOutput()">
+        <option value="">Выберите кабинет</option>
+        <option value="it-1">it-1</option>
+        <option value="it-2">it-2</option>
+        <option value="it-3">it-3</option>
+        <option value="it-4">it-4</option>
+        <option value="it-5">it-5</option>
+        <option value="it-6">it-6</option>
+        <option value="it-7">it-7</option>
+        <option value="it-8">it-8</option>
+        <option value="it-9">it-9</option>
+        <option value="it-10">it-10</option>
+        <option value="it-11">it-11</option>
+        <option value="it-12">it-12</option>
+        <option value="it-13">it-13</option>
+        <option value="it-14">it-14</option>
+        <option value="it-15">it-15</option>
+        <option value="it-16">it-16</option>
+        <option value="it-17">it-17</option>
+        <option value="320">320</option>
+    </select>
+    <input type="date" id="datePicker" style="display:none;" onchange="updateOutput()">
+    <div id="output"></div>
+    <div class="image-container">
+        <img src="https://www.meme-arsenal.com/memes/53a95d0b7945b598936b686fb8a02a84.jpg" alt="Такса">
+    </div>
+</div>
+
+<script>
+function toggleCabinetSelect() {
+    var select = document.getElementById('cabinetSelect');
+    select.style.display = select.style.display === "none" ? "block" : "none";
+}
+
+function showDatePicker() {
+    var datePicker = document.getElementById('datePicker');
+    datePicker.style.display = datePicker.style.display === "none" ? "block" : "none";
+}
+
+function updateOutput() {
+    var select = document.getElementById('cabinetSelect');
+    var datePicker = document.getElementById('datePicker');
+    var output = document.getElementById('output');
+    var selectedCabinet = select.value;
+    var selectedDate = new Date(datePicker.value);
+
+    if (selectedCabinet === "it-15" && selectedDate.getDay() === 6) {
+        output.textContent = "Кабинет занят, занятие проводит Петр Жабин";
+    } else if (selectedCabinet === "320" && selectedDate.getDay() === 6) {
+        output.textContent = "Кабинет занят, (скорее всего освободится под вечер так как Почечура принимает лабы)";
+    } else if (selectedCabinet && datePicker.value) {
+        output.textContent = "Кабинет " + selectedCabinet + " свободен";
+    } else {
+        output.textContent = "";
+    }
+}
+</script>
+</body>
+</html>
