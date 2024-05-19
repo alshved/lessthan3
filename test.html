@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="forall.css">
 </head>
 <body>
-    <button onclick="window.open('https://www.youtube.com/@Mem_glavstroy')" class="Mell">Самый лучший канал во всем мире</button>
+    <button id="channelButton" class="Mell">Самый лучший канал во всем мире</button>
     <img src="https://media.tenor.com/DAYJrTlyVoYAAAAC/комару-комаругиф.gif" alt="Котик Комару" class="first-gif">
     <img src="https://media1.tenor.com/m/UWkl80NoliMAAAAC/комару-кот-комару.gif" alt="Котик Комару" class="second-gif">
     <img src="https://media.tenor.com/KOh9_652FFYAAAAd/многозначительно-подмигнул-комару-кот-подмигнул.gif" alt="Котик Комару" class="third-gif">
@@ -77,9 +77,17 @@
         }
 
         var buttons = document.getElementsByTagName("button");
-        for (var i = 0; i < buttons.length; i++) {
-            buttons[i].onclick = openModal;
+        for (var i = 0; i < buttons.length; i++) {  
+            buttons[i].onclick = function(event) {
+                if (event.target.innerText !== "Самый лучший канал во всем мире") {
+                    openModal();
+                }
+            };
         }
+
+        document.getElementById("channelButton").onclick = function() {
+            window.open("https://www.youtube.com/@Mem_glavstroy");
+        };
 
         span.onclick = function() {
             modal.style.display = "none";
@@ -90,6 +98,7 @@
                 modal.style.display = "none";
             }
         }*/
+
     </script>
 
 </body>
