@@ -15,7 +15,6 @@ class SheduleScraperMAI:
         :param str url: адрес сайта маи с расписанием
         :param str cache_dir: директория для кэширования
         """
-
         self.url = url
         if cache_dir is None:
             self.cache_dir = ''
@@ -59,12 +58,12 @@ class SheduleScraperMAI:
                 break
         driver.get(driver.current_url + '&week=1')
         choose_week_btn = driver.find_element(By.CSS_SELECTOR,
-                                              '.btn.btn-sm.btn-outline-primary.me-2.mb-2.w-100.w-sm-auto.text-center + '
-                                              '.btn.btn-sm.btn-outline-primary.me-2.mb-2.w-100.w-sm-auto.text-center')
-
+                                              '.btn.btn-sm.btn-outline-primary.me-2.mb-2.w-100.w-sm-auto.text-center[href="#collapseWeeks"]')
+        print("d" + choose_week_btn.text)
         choose_week_btn.send_keys('\n')
         weeks_elements_container = driver.find_element(By.CSS_SELECTOR, '.list-group.list-group-striped.list-group-sm')
         weeks_els = weeks_elements_container.find_elements(By.CSS_SELECTOR, 'li')
+
         weeks_identificators = dict()
         for i in range(len(weeks_els)):
             week_id = weeks_els[i].find_element(By.CSS_SELECTOR, ':last-child').text.replace(' ', '')
@@ -79,9 +78,10 @@ class SheduleScraperMAI:
         if req_week_btn:
             req_week_btn[0].send_keys('\n')
 
-    def scrap_by_group_and_week(self, inst: str, course: str, group: str, week: str, try_cache=True):
+    def scrap_by_group_and_week(self, inst: str, course: str, group: str, week: str, try_cache=True, subject=None):
         """
         Скрапит информацию с сайта
+        :param subject: предмет
         :param int inst: номер института
         :param str group: название группы полностью
         :param str week: неделя в формате ДД.ММ.ГГ-ДД.ММ.ГГ
@@ -129,13 +129,14 @@ class SheduleScraperMAI:
                         cur['teachers'] = []
                         for ind in range(1, len(lesson_info) - 1):
                             cur['teachers'].append(lesson_info[ind].text)
-
                         cur['cabinet'] = lesson_info[-1].text
-                        lessons.append(cur)
-                date_info = days_elements[day_ind].find_element(By.TAG_NAME, 'span').text.replace(',', '').split(' ')
-                week_day = date_info[0]
-                date = date_info[1] + date_info[2]
-                res[week_day] = dict({'lessons': lessons, 'date': date})
+                        if subject is None or cur['subject'] == subject:
+                            lessons.append(cur)
+                if len(lessons) != 0:
+                    date_info = days_elements[day_ind].find_element(By.TAG_NAME, 'span').text.replace(',', '').split(' ')
+                    week_day = date_info[0]
+                    date = date_info[1] + date_info[2]
+                    res[week_day] = dict({'lessons': lessons, 'date': date})
 
             with open(data_path, 'w', encoding='utf-8') as fp:
                 json.dump(res, fp, ensure_ascii=False, indent=2)
@@ -251,5 +252,4 @@ class SheduleScraperMAI:
     #                     self.scrap_by_group_and_week(inst, g, week, course, try_cache=True)
 
 
-# s = SheduleScraperMAI('https://mai.ru/education/studies/schedule/')
-# ans = s.scrap_by_group_and_week("8", "1", "М8О-110Б-23", "1")
+
