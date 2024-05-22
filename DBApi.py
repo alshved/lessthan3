@@ -23,6 +23,8 @@ class DataBase:
     if(self.cursor.fetchone() == None):
       self.cursor.execute('CREATE TABLE "Class" ("Cabinet"	TEXT NOT NULL, "Group "	NUMERIC, "Teacher"	TEXT NOT NULL, "TimeStart"	TEXT NOT NULL, "TimeFinish"	TEXT NOT NULL, "Name"	TEXT NOT NULL, "Date"	TEXT NOT NULL, "Regularity"	BIT, "Type"	BIT)')
       self.connection.commit()
+      return True
+    return False
    
   def DeleteTable(self):
     self.cursor.execute('DROP table if exists Class')
