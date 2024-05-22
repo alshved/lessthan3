@@ -7,6 +7,7 @@ import uvicorn
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static", html=True), name="static")
 
+
 # для тестирования использовать Chrome, другие браузеры как то странно кэшируют файлы с кодом и не обновляют их
 
 
@@ -16,6 +17,11 @@ def get_info(data=Body()):
     print("received put request from front. Request info:")
     print(data)
     return data
+
+
+@app.put("/add_pair")
+def add_pair(data=Body()):
+    print(data)
 
 
 @app.get("/")
