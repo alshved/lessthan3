@@ -87,4 +87,5 @@ class DataBase:
 
 
 s = DataBase("LessonsDB.db")
+s.add_from_json("8i1cМ8О-110Б-23g2w.json")
 print(s.load_lessons_by_week("2024.04.08.-2024.04.14"))
