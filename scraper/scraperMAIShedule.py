@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 import json
 from os import path
 from selenium.common.exceptions import NoSuchElementException
+import datetime
 
 
 class SheduleScraperMAI:
@@ -84,7 +85,7 @@ class SheduleScraperMAI:
         :param subject: предмет
         :param int inst: номер института
         :param str group: название группы полностью
-        :param str week: неделя в формате ДД.ММ.ГГ-ДД.ММ.ГГ
+        :param str week: неделя в формате ДД.ММ.ГГ-ДД.ММ.ГГ или номер недели
         :param try_cache: если True, то будет предпринята попытка загрузить данные из кэша, иначе будет скрапить с нуля
         :param course: номер курса
         :return: словарь, состоящий из расписания на конкретную неделю
@@ -92,6 +93,10 @@ class SheduleScraperMAI:
 
         data_path = path.join(self.cache_dir, f'{inst}i{course}c{group}g{week}w.json')
         answer = {'file_name': f'{inst}i{course}c{group}g{week}w.json', 'file_path': data_path, 'data': {}}
+
+        if week.isdigit():
+            week = self.scrap_available_weeks()[int(week) - 1]
+
         if try_cache and path.exists(data_path):
             with open(data_path, 'r', encoding='utf-8') as fp:
                 res = json.load(fp)
@@ -105,17 +110,27 @@ class SheduleScraperMAI:
                                    required_course=course)
             res = dict()
             days_elements = driver.find_elements(By.CLASS_NAME, 'step-content')
+            week_start = week.split('-')[0]
+            date_start = datetime.date(int(week_start.split('.')[2]), int(week_start.split('.')[1]), int(week_start.split('.')[0]))
+            cur_date = date_start
             for day_ind in range(len(days_elements)):
+
                 lessons_elements = days_elements[day_ind].find_elements(By.CSS_SELECTOR, '.mb-4')
+                date_info = days_elements[day_ind].find_element(By.TAG_NAME, 'span').text.replace(',', '').split(
+                    ' ')
+                day_number = int(date_info[1])
+                week_day = date_info[0]
+                print(day_number)
+                while day_number != cur_date.day:
+                    cur_date += datetime.timedelta(days=1)
                 lessons = []
                 for i in range(len(lessons_elements)):
-                    subject_name_element = None
-                    lesson_info_element = None
                     try:
                         subject_name_element = lessons_elements[i].find_element(By.TAG_NAME, 'div')
                         lesson_info_element = lessons_elements[i].find_element(By.TAG_NAME, 'ul')
                     except selenium.common.exceptions.NoSuchElementException:
-                        pass
+                        continue
+
                     if subject_name_element and lesson_info_element:
                         cur = dict()
                         sub_info = subject_name_element.text.split()
@@ -133,10 +148,9 @@ class SheduleScraperMAI:
                         if subject is None or cur['subject'] == subject:
                             lessons.append(cur)
                 if len(lessons) != 0:
-                    date_info = days_elements[day_ind].find_element(By.TAG_NAME, 'span').text.replace(',', '').split(' ')
-                    week_day = date_info[0]
-                    date = date_info[1] + date_info[2]
-                    res[week_day] = dict({'lessons': lessons, 'date': date})
+
+                    res[week_day] = dict({'lessons': lessons, 'date': str(cur_date)})
+                    week_start = week.split('-')[0]
 
             with open(data_path, 'w', encoding='utf-8') as fp:
                 json.dump(res, fp, ensure_ascii=False, indent=2)
@@ -252,4 +266,5 @@ class SheduleScraperMAI:
     #                     self.scrap_by_group_and_week(inst, g, week, course, try_cache=True)
 
 
-
+s = SheduleScraperMAI("https://mai.ru/education/studies/schedule", "")
+s.scrap_by_group_and_week("8", "1", "М8О-110Б-23", "2", False)
