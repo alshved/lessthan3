@@ -59,8 +59,8 @@ class SheduleScraperMAI:
                 break
         driver.get(driver.current_url + '&week=1')
         choose_week_btn = driver.find_element(By.CSS_SELECTOR,
-                                              '.btn.btn-sm.btn-outline-primary.me-2.mb-2.w-100.w-sm-auto.text-center[href="#collapseWeeks"]')
-        print("d" + choose_week_btn.text)
+                                              '.btn.btn-sm.btn-outline-primary.me-2.mb-2.w-100'
+                                              '.w-sm-auto.text-center[href="#collapseWeeks"]')
         choose_week_btn.send_keys('\n')
         weeks_elements_container = driver.find_element(By.CSS_SELECTOR, '.list-group.list-group-striped.list-group-sm')
         weeks_els = weeks_elements_container.find_elements(By.CSS_SELECTOR, 'li')
@@ -111,7 +111,8 @@ class SheduleScraperMAI:
             res = dict()
             days_elements = driver.find_elements(By.CLASS_NAME, 'step-content')
             week_start = week.split('-')[0]
-            date_start = datetime.date(int(week_start.split('.')[2]), int(week_start.split('.')[1]), int(week_start.split('.')[0]))
+            date_start = datetime.date(int(week_start.split('.')[2]), int(week_start.split('.')[1]),
+                                       int(week_start.split('.')[0]))
             cur_date = date_start
             for day_ind in range(len(days_elements)):
 
@@ -120,7 +121,6 @@ class SheduleScraperMAI:
                     ' ')
                 day_number = int(date_info[1])
                 week_day = date_info[0]
-                print(day_number)
                 while day_number != cur_date.day:
                     cur_date += datetime.timedelta(days=1)
                 lessons = []
@@ -148,9 +148,7 @@ class SheduleScraperMAI:
                         if subject is None or cur['subject'] == subject:
                             lessons.append(cur)
                 if len(lessons) != 0:
-
-                    res[week_day] = dict({'lessons': lessons, 'date': str(cur_date)})
-                    week_start = week.split('-')[0]
+                    res[week_day] = dict({'lessons': lessons, 'date': str(cur_date).replace('-', '.')})
 
             with open(data_path, 'w', encoding='utf-8') as fp:
                 json.dump(res, fp, ensure_ascii=False, indent=2)
@@ -264,7 +262,3 @@ class SheduleScraperMAI:
     #                 for week in available_weeks:
     #                     print(inst, course, g, week)
     #                     self.scrap_by_group_and_week(inst, g, week, course, try_cache=True)
-
-
-s = SheduleScraperMAI("https://mai.ru/education/studies/schedule", "")
-s.scrap_by_group_and_week("8", "1", "М8О-110Б-23", "2", False)
