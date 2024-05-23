@@ -24,6 +24,16 @@ def add_pair(data=Body()):
     print(data)
 
 
+@app.put("/delete_pair")
+def add_pair(data=Body()):
+    print(data)
+
+
+@app.put("/update_pair")
+def add_pair(data=Body()):
+    print(data)
+
+
 @app.get("/")
 def root():
     return FileResponse("static/index.html")
