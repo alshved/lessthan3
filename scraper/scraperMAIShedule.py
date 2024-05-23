@@ -5,6 +5,7 @@ import json
 from os import path
 from selenium.common.exceptions import NoSuchElementException
 import datetime
+import re
 
 
 class SheduleScraperMAI:
@@ -22,6 +23,10 @@ class SheduleScraperMAI:
         else:
             self.cache_dir = cache_dir
         self._driver = webdriver.Chrome()
+
+    @staticmethod
+    def has_numbers(input_string):
+        return bool(re.search(r'\d', input_string))
 
     def __go_to_groups_page__(self, course: str, inst: str):
         """
@@ -137,14 +142,18 @@ class SheduleScraperMAI:
                         cur['subject'] = ' '.join(sub_info[:len(sub_info) - 1])
                         cur['subject_type'] = sub_info[-1]
 
-                        lesson_info = lesson_info_element.find_elements(By.TAG_NAME, 'li')
+                        lesson_info = lesson_info_element.find_elements(By.CSS_SELECTOR, 'li')
                         time = lesson_info[0].text.replace(' ', '').split('–')
                         cur['time_start'] = time[0]
                         cur['time_end'] = time[1]
                         cur['teachers'] = []
-                        for ind in range(1, len(lesson_info) - 1):
-                            cur['teachers'].append(lesson_info[ind].text)
-                        cur['cabinet'] = lesson_info[-1].text
+                        cur['cabinet'] = ""
+                        for ind in range(1, len(lesson_info)):
+                            if SheduleScraperMAI.has_numbers(lesson_info[ind].text):
+                                cur['cabinet'] += lesson_info[ind].text + " "
+                            else:
+                                cur['teachers'].append(lesson_info[ind].text)
+
                         if subject is None or cur['subject'] == subject:
                             lessons.append(cur)
                 if len(lessons) != 0:
@@ -262,3 +271,7 @@ class SheduleScraperMAI:
     #                 for week in available_weeks:
     #                     print(inst, course, g, week)
     #                     self.scrap_by_group_and_week(inst, g, week, course, try_cache=True)
+
+
+s = SheduleScraperMAI("https://mai.ru/education/studies/schedule/")
+s.scrap_by_group_and_week("8", "1", "М8О-110Б-23", "20.05.2024-26.05.2024")
