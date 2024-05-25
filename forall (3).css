@@ -1,0 +1,220 @@
+body {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.774);
+    text-align: center;    
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    margin: auto;
+    padding: auto;
+    overflow: hidden;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+h1 {
+    color: #000;
+}
+
+.image1 {
+    position: absolute;
+    top: 4%;
+    left: 2%;
+    height: 40%;
+    width: 30%;
+}
+
+.image2 {
+    position: absolute;
+    bottom: 4%;
+    right: 2%;
+    height: 40%;
+    width: 25%;
+}
+
+.bottomLeft {
+    position: absolute; 
+    font-size: 18px;
+    bottom: 4%; 
+    left: 2%; 
+    color: #ffffff; 
+    background-color: rgba(0, 0, 0, 0.749); 
+    padding: 10px; 
+    border-radius: 5px; 
+}
+
+.upperRight {
+    position: absolute; 
+    font-size: 18px;
+    top: 4%; 
+    right: 2%; 
+    color: #ffffff; 
+    background-color: rgba(0, 0, 0, 0.749); 
+    padding: 10px; 
+    border-radius: 5px; 
+}
+
+/*
+.first-gif {
+    position: absolute;
+    top: 1%;
+    right: 1%;
+    width: 20%;
+    height: 25%;
+}
+
+.second-gif {
+    position: absolute;
+    top: 1%;
+    left: 1%;
+    width: 20%;
+    height: 25%;
+}
+
+.third-gif {
+    position: absolute;
+    bottom: 1%;
+    right: 1%;
+    width: 20%;
+    height: 25%;
+}
+
+.fourth-gif {
+    position: absolute;
+    bottom: 1%;
+    left: 1%;
+    width: 20%;
+    height: 25%;
+}
+
+.fiveth-gif {
+    position: absolute;
+    left: 40%;
+    top: 1%;
+    width: 20%;
+    height: 25%;
+}
+
+.sixth-gif {
+    position: absolute;
+    top: 37.8%;
+    right: 1%;
+    width: 20%;
+    height: 25%;
+}
+
+.seventh-gif {
+    position: absolute;
+    top: 37.8%;
+    left: 1%;
+    width: 20%;
+    height: 25%;
+}*/
+
+.container {
+    background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 30%;
+    margin: auto;
+    border-radius: 15px;
+}
+
+button {
+    background-color: blueviolet;
+    color: #ffffff;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border:black;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+button:hover {
+    background-color: rgba(137, 43, 226, 0.745);
+    color: #ffffffb2;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3)
+}
+
+button:active {
+    background-color: purple;
+    transform: scale(0.96);
+}
+
+button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+}
+
+.modal {
+    display: none; 
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 16px;
+    text-align: center;
+    background-color: #fefefe;
+    color: #000;
+    margin: 3% auto;
+    border-radius: 5%;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 300px;
+    height: 600px;
+    overflow: auto;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;   
+}
+
+.close:hover .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+}
+
+input, select {
+    width: 95%;
+    padding: 8px;
+    margin-top: 6px;
+    box-sizing: border-box;
+}
+
+.send.button {
+    padding: 8px;
+    margin-top: 6px;
+}

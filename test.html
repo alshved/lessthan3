@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Расписание it этажа</title>
+    <link rel="stylesheet" href="forall.css">
+</head>
+<body>
+
+    <!--
+    <img src="https://media.tenor.com/DAYJrTlyVoYAAAAC/комару-комаругиф.gif" alt="Котик Комару" class="first-gif">
+    <img src="https://media1.tenor.com/m/UWkl80NoliMAAAAC/комару-кот-комару.gif" alt="Котик Комару" class="second-gif">
+    <img src="https://media.tenor.com/KOh9_652FFYAAAAd/многозначительно-подмигнул-комару-кот-подмигнул.gif" alt="Котик Комару" class="third-gif">
+    <img src="https://steamuserimages-a.akamaihd.net/ugc/1764867659370342290/F00DB771366F45154B078E4CBA178C8AF9D4C73C/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false" alt="КотикКомару" class="fourth-gif">
+    <img src="https://i.gifer.com/embedded/download/23wH.gif" alt="Котик" class="fiveth-gif">
+    <img src="https://media1.tenor.com/m/jysc1QyPQjsAAAAd/cat-dance.gif" alt="Танцующий котик" class="sixth-gif">
+    <img src="https://media.tenor.com/tyaej0WHQd0AAAAM/cat-sleep.gif" alt="Котик" class="seventh-gif">
+    -->
+    <img src="https://www.newstaff.ru/2023/11/17/1521655b9e77ea3f390b41f5ec89f3f10a67cb59.jpg" alt="" class="image1">
+    <img src="https://i2.wp.com/miro.medium.com/1*29NeeIGT0BElEBNfzE_VlQ.jpeg" alt="" class="image2">
+
+    <!-- QR-COD -->
+    <div class="bottomLeft">
+        <p>Отсканируй и попадешь на наш гугл календарь</p>
+        <img src="http://qrcoder.ru/code/?https%3A%2F%2Fcalendar.google.com%2Fcalendar%2Fu%2F0%3Fcid%3DZjI1MzQ0ZTI2NDlkOTY3Yzc4NTY2YTA2MWEwNmZhZTY0OTBhMTYyYzlhN2I2NzhlNjFlNjE3MWYxZmFjMzdjMEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&4&0" alt="QR-cod">
+    </div>
+
+    <div class="upperRight">
+        <p>Здесь что то должно быть (по хорошему)</p>
+    </div>
+
+    <!--ЦЕНТРАЛЬНО ОКНО-->
+    <div class="container">
+        <h1>Что-то странное</h1>
+        <button class="button" id="addPair">Добавить пару</button>
+        <button class="button" id="deletePair">Удалить пару</button>
+        <button class="button" id="replacePair">Изменить пару</button>
+        <button class="button" id="openLinkButton">Гугл календарь</button>
+        <button class="button" onclick="window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ')">Самая важная кнопка</button>
+        <!--ПРИВЕДЕННЫЕ НИЖЕ ДВЕ КНОПКИ ПОКА БЕЗ ФУНКЦИОНАЛА-->
+        <button class="button">Обновить данные</button>
+        <button class="button">Запуск парсера</button>
+
+        <!-- Модальное окно для "ДОБАВЛЕНИЯ ПАРЫ" -->
+        <div id="myModal1" class="modal">
+            <div class="modal-content"> 
+                <span class="close" id="closeModal1">&times;</span>
+
+                <form id="modalForm">
+                    <label for="teacher">Фамилия преподователя:</label>
+                    <input type="text" id="teacher" name="teacher" required>
+                    <label for="subject">Предмет:</label>
+                    <input type="text" id="subject" name="subject" required>
+                    <label for="subject">Группа:</label>
+                    <input type="text" id="group" name="group" required>
+                    <label for="time">Время начала:</label>
+                    <input type="time" id="start-time" name="start-time" required>
+                    <label for="end-time">Время конца:</label>
+                    <input type="time" id="end-time" name="end-time" required>
+                    <label for="room">Кабинет:</label>
+                    <select id="room" name="room" required>
+                        <option value="it-1">it-1</option>
+                        <option value="it-2">it-2</option>
+                        <option value="it-3">it-3</option>
+                        <option value="it-4">it-4</option>
+                        <option value="it-5">it-5</option>
+                        <option value="it-6">it-6</option>
+                        <option value="it-7">it-7</option>
+                        <option value="it-8">it-8</option>
+                        <option value="it-9">it-9</option>
+                        <option value="it-10">it-10</option>
+                        <option value="it-11">it-11</option>
+                        <option value="it-12">it-12</option>
+                        <option value="it-13">it-13</option>
+                        <option value="it-14">it-14</option>
+                        <option value="it-15">it-15</option>
+                        <option value="it-16">it-16</option>
+                        <option value="it-17">it-17</option>
+                        <option value="320">320</option>
+                        <option value="322">322</option>
+                    </select>
+                    <label for="date">Выбор даты:</label>
+                    <input type="date" id="date" name="date"required>
+                    <label for="type">Выбор типа:</label>
+                    <select name="type" id="type" required>
+                        <option value="Одноразовый">Одноразовый</option>
+                        <option value="Еженедельный">Еженедельный</option>
+                    </select>
+                    <button type="submit" class="sendbutton">Отправить</button>
+                </form>
+            </div>
+        </div>
+
+        <!--Модальное окно для "УДАЛЕНИЯ ПАРЫ"-->
+        <div id="myModal2" class="modal">
+            <div class="modal-content"> 
+                <span class="close" id="closeModal2">&times;</span>
+
+                <form id="modalForm">
+                    <label for="teacher">Фамилия преподователя:</label>
+                    <input type="text" id="teacher" name="teacher" required>
+                    <label for="subject">Предмет:</label>
+                    <input type="text" id="subject" name="subject" required>
+                    <label for="subject">Группа:</label>
+                    <input type="text" id="group" name="group" required>
+                    <label for="time">Время начала:</label>
+                    <input type="time" id="start-time" name="start-time" required>
+                    <label for="end-time">Время конца:</label>
+                    <input type="time" id="end-time" name="end-time" required>
+                    <label for="room">Кабинет:</label>
+                    <select name="room" id="room" required>
+                        <option value="it-1">it-1</option>
+                        <option value="it-2">it-2</option>
+                        <option value="it-3">it-3</option>
+                        <option value="it-4">it-4</option>
+                        <option value="it-5">it-5</option>
+                        <option value="it-6">it-6</option>
+                        <option value="it-7">it-7</option>
+                        <option value="it-8">it-8</option>
+                        <option value="it-9">it-9</option>
+                        <option value="it-10">it-10</option>
+                        <option value="it-11">it-11</option>
+                        <option value="it-12">it-12</option>
+                        <option value="it-13">it-13</option>
+                        <option value="it-14">it-14</option>
+                        <option value="it-15">it-15</option>
+                        <option value="it-16">it-16</option>
+                        <option value="it-17">it-17</option>
+                        <option value="320">320</option>
+                        <option value="322">322</option>
+                    </select>
+                    <label for="date">Выбор даты:</label>
+                    <input type="date" id="date" name="date" required>
+                    <label for="del">Сколько пар удалить:</label>
+                    <select name="del" id="del" required>
+                        <option value="1">одну</option>
+                        <option value="все">все</option>
+                    </select>
+                    <button type="submit" class="sendbutton">Отправить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        
+        // Для добавления пары
+        var modal1 = document.getElementById("myModal1");
+        var add = document.getElementById('addPair');
+        var span1 = document.getElementById('closeModal1');
+        
+        // Для удаления пары
+        var modal2 = document.getElementById("myModal2");
+        var del = document.getElementById('deletePair');
+        var span2 = document.getElementById('closeModal2');
+
+        // Для изменения пары
+        var replace = document.getElementById('replacePair');
+
+        add.onclick = function() {
+            modal1.style.display = 'block';
+        }
+
+        span1.onclick = function() {
+            modal1.style.display = 'none';
+        }
+
+        del.onclick = function() {
+            modal2.style.display = 'block';
+        }
+
+        span2.onclick = function() {
+            modal2.style.display = 'none';
+        }
+
+        replace.onclick = function() {
+            modal1.style.display = 'block';
+            modal2.style.display = 'block';
+        }
+
+        document.getElementById("openLinkButton").onclick = function() {
+            window.open("https://calendar.google.com/calendar/u/0?cid=ZjI1MzQ0ZTI2NDlkOTY3Yzc4NTY2YTA2MWEwNmZhZTY0OTBhMTYyYzlhN2I2NzhlNjFlNjE3MWYxZmFjMzdjMEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t");
+        }
+
+    window.onclick = function(event) {
+        if (event.target == modal1) {
+            modal1.style.display = 'none';
+        } else if (event.target == modal2) {
+            modal2.style.display = 'none';
+        }
+    }
+
+    </script>
+
+</body>
+</html>
