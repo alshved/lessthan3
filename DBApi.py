@@ -20,7 +20,7 @@ class data_base:
       for les in lesson["lessons"]:
         if (les["cabinet"] in self.validation_cabinet):
           try:
-            self.cursor.execute('INSERT INTO Class VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', (les["cabinet"], 110, ' '.join(les["teachers"]), les['time_start'], les["time_end"], les["subject"], lesson["date"], 1, 1))
+            self.cursor.execute('INSERT INTO Class VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', (les["cabinet"], 110, ' '.join(les["teachers"]), les['time_start'], les["time_end"], les["subject"], lesson["date"], None, 1, 1))
           except sqlite3.Error as error:
             print("Ошибка добавление кабинета")
             return 1
@@ -30,7 +30,7 @@ class data_base:
     try:
       self.cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='Class'")
       if(self.cursor.fetchone() == None):
-        self.cursor.execute('CREATE TABLE "Class" ("Cabinet"	TEXT NOT NULL, "Group "	NUMERIC, "Teacher"	TEXT NOT NULL, "TimeStart"	TEXT NOT NULL, "TimeFinish"	TEXT NOT NULL, "Name"	TEXT NOT NULL, "Date"	TEXT NOT NULL, "Regularity"	BIT, "Type"	BIT)')
+        self.cursor.execute('CREATE TABLE "Class" ("Cabinet"	TEXT NOT NULL, "Group "	NUMERIC, "Teacher"	TEXT NOT NULL, "TimeStart"	TEXT NOT NULL, "TimeFinish"	TEXT NOT NULL, "Name" TEXT NOT NULL, "Date" TEXT NOT NULL, "GoogleID" TEXT UNIQUE, "Regularity"	BIT, "Type"	BIT)')
         self.connection.commit()
         return True
     except sqlite3.Error as error:
@@ -89,9 +89,9 @@ class data_base:
       return None
     return None
   
-  def update_db_lesson(self, cabinet, time_start, date, newtime_start, newDate):
+  def update_db_lesson(self, cabinet, time_start, date, newtime_start, new_date):
     try:
-      self.cursor.execute("UPDATE Class SET TimeStart = ? AND Date = ? WHERE Cabinet = ? AND TimeStart = ? AND Date = ?", (newtime_start, newDate, cabinet, time_start, date))
+      self.cursor.execute("UPDATE Class SET TimeStart = ? AND Date = ? WHERE Cabinet = ? AND TimeStart = ? AND Date = ?", (newtime_start, new_date, cabinet, time_start, date))
       self.connection.commit()
     except sqlite3.Error as error:
       print("Ошибка обновления")
@@ -111,6 +111,19 @@ class data_base:
         for lesson in db_data:
             res.append(data_base.__from_tuple_to_dict(lesson))
         return res
+  
+  def add_id(self, cabinet, time_start, date, ID):
+    try:
+      self.cursor.execute("UPDATE Class SET GoogleID = ? WHERE Cabinet = ? AND TimeStart = ? AND Date = ?", (ID, cabinet, time_start, date))
+      self.connection.commit()
+    except sqlite3.Error as error:
+      print("Ошибка при ID")
+
+  def get_id(self, cabinet, time_start, date, ID):
+    try:
+      return self.cursor.execute("SELECT GoogleID FROM Class WHERE Cabinet = ? AND TimeStart = ? AND Date = ?", (cabinet, time_start, date)).fetchall()[0][0]
+    except sqlite3.Error as error:
+      print("Ошибка при ID")
 
   def __from_tuple_to_dict(tuple: tuple) -> dict:
     return {"Cabinet": tuple[0],
