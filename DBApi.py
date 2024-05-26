@@ -24,7 +24,7 @@ class DataBase:
                             "INSERT INTO Class VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                             (
                                 les["cabinet"],
-                                110,
+                                les['group'],
                                 " ".join(les["teachers"]),
                                 les["time_start"],
                                 les["time_end"],
@@ -111,7 +111,7 @@ class DataBase:
             return False
         return False
 
-    def delete_lesson(self, cabinet, time_start, date) -> bool:
+    def delete_lesson(self, cabinet, time_start, date):
         try:
             self.cursor.execute(
                 "DELETE FROM Class WHERE Cabinet = ? AND TimeStart = ? AND Date = ?",
@@ -167,7 +167,7 @@ class DataBase:
                 f"SELECT * FROM Class WHERE Date <= '{data_to}' AND Date >= '{data_from}'"
             ).fetchall()
         except sqlite3.Error as error:
-            print("Ошибка подключения")
+            print(f"Ошибка подключения: {error}")
             return None
         res = []
         for lesson in db_data:
