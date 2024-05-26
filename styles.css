@@ -215,18 +215,18 @@ input, select {
 }
 
 .left-section, .right-section {
-margin-top: 0px; /* Добавляем отступ сверху */
-float: left; /* Размещаем блоки слева и справа */
-width: 50%; /* Задаем одинаковую ширину для обоих блоков */
+margin-top: 0px; 
+float: left; 
+width: 48%; 
 }
 
 .left-section label, .right-section label {
 display: block;
-margin-bottom: 5px; /* Добавляем отступ снизу для метки */
+margin-bottom: 5px; 
 }
 
 .left-section select, .right-section select {
-width: calc(100% - 10px); /* Устанавливаем ширину с отступом */
+width: calc(100% - 10px); 
 padding: 5px;
-margin-bottom: 10px; /* Добавляем отступ снизу для элемента select */
+margin-bottom: 10px; 
 }
