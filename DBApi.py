@@ -26,7 +26,7 @@ class DataBase:
                             "INSERT INTO Class VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                             (
                                 les["cabinet"],
-                                tmp_data['group'],
+                                les["group"],
                                 " ".join(les["teachers"]),
                                 les["time_start"],
                                 les["time_end"],
@@ -93,7 +93,7 @@ class DataBase:
                     and cabinet in self.validation_cabinet
             ):
                 self.cursor.execute(
-                    "INSERT INTO Class VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    "INSERT INTO Class VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     (
                         cabinet,
                         group,
@@ -102,6 +102,7 @@ class DataBase:
                         time_end,
                         name,
                         date,
+                        None,
                         regularity,
                         0,
                     ),
@@ -205,8 +206,9 @@ class DataBase:
             "time_finish": input_tuple[4],
             "subject": input_tuple[5],
             "date": input_tuple[6],
-            "regularity": input_tuple[7],
-            "type": input_tuple[8],
+            "google_id" : input_tuple[7],
+            "regularity": input_tuple[8],
+            "type": input_tuple[9],
         }
 
     def __del__(self):
