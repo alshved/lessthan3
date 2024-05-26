@@ -39,7 +39,9 @@
     &quot;Python.scraperMAIShedule.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;dev/dataBase&quot;,
+
+    &quot;git-widget-placeholder&quot;: &quot;scraper&quot;,
+
     &quot;last_opened_file_path&quot;: &quot;D:/univer/prog/it-project/lessthan3/scraper&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
