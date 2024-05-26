@@ -106,8 +106,8 @@
                     <input type="date" id="date" name="date" required>
                     <label for="type">Выбор типа:</label>
                     <select name="type" id="type" required>
-                        <option value="Одноразовый">Одноразовый</option>
-                        <option value="Еженедельный">Еженедельный</option>
+                        <option value="one_time">Одноразовый</option>
+                        <option value="every_week">Еженедельный</option>
                     </select>
                     <button type="submit" class="sendbutton">Отправить</button>
                 </form>
@@ -157,8 +157,8 @@
                     <input type="date" id="date" name="date" required>
                     <label for="del">Сколько пар удалить:</label>
                     <select name="del" id="del" required>
-                        <option value="1">одну</option>
-                        <option value="все">все</option>
+                        <option value="one">одну</option>
+                        <option value="all">все</option>
                     </select>
                     <button type="submit" class="sendbutton">Отправить</button>
                 </form>
@@ -170,7 +170,7 @@
             <div class="modal-content1">
                 <span class="close" id="closeReplace">&times;</span>
                 <div class="left-section">
-                    <p style="font-size: 20px;">Что меняем</p>
+                    <p style="font-size: 20px;">На что меняем</p>
                     <form id="modalForm">
                         <label for="teacher">Фамилия преподователя:</label>
                         <input type="text" id="teacher" name="teacher" required>
@@ -208,14 +208,14 @@
                         <input type="date" id="date" name="date" required>
                         <label for="type">Выбор типа:</label>
                         <select name="type" id="type" required>
-                            <option value="Одноразовый">Одноразовый</option>
-                            <option value="Еженедельный">Еженедельный</option>
+                            <option value="one_time">Одноразовый</option>
+                            <option value="every_week">Еженедельный</option>
                         </select>
                     </form>
                 </div>
 
                 <div class="right-section">
-                    <p style="font-size: 20px;">На что меняем</p>
+                    <p style="font-size: 20px;">Что меняем</p>
                     <form id="modalForm">
                         <label for="teacher">Фамилия преподователя:</label>
                         <input type="text" id="teacher" name="teacher" required>
@@ -253,17 +253,167 @@
                         <input type="date" id="date" name="date" required>
                         <label for="del">Сколько пар удалить:</label>
                         <select name="del" id="del" required>
-                            <option value="1">одну</option>
-                            <option value="все">все</option>
+                            <option value="one">одну</option>
+                            <option value="all">все</option>
                         </select>
                     </form>
                 </div>
-                <button type="submit" class="sendbutton">Отправить</button>
+                <button type="submit" id="replace-pair-btn" class="sendbutton">Отправить</button>
             </div>
         </div>
     </div>
 
     <script>
+        function open_mw_add_pair() {
+            modal1.style.display = 'block';
+            let form = document.querySelector("#myModal1 > div > form");
+            var submit_btn = form.querySelector(".sendbutton")
+            submit_btn.onclick = function () {
+                var teacher = form.querySelector("#teacher");
+                var subject = form.querySelector("#subject");
+                var group = form.querySelector("#group");
+                var start_time = form.querySelector("#start-time");
+                var end_time = form.querySelector("#end-time");
+                var cab = form.querySelector("#room");
+                var date = form.querySelector("#date");
+                var type = form.querySelector("#type");
+
+                const response = fetch("/add_pair", {
+                    method: "PUT",
+                    body: JSON.stringify({
+                        teacher: teacher.value,
+                        subject: subject.value,
+                        cabinet: cab.value,
+                        start_time: start_time.value,
+                        end_time: end_time.value,
+                        group: group.value,
+                        date: date.value,
+                        type: type.value
+                    })
+                })
+            }
+        }
+
+        function close_mw_add_pair() {
+            modal1.style.display = 'none';
+        }
+
+        function open_mw_delete_pair() {
+            modal2.style.display = 'block';
+            let form = document.querySelector("#myModal2 > div > form");
+            var submit_btn = form.querySelector(".sendbutton")
+            submit_btn.onclick = function () {
+                var teacher = form.querySelector("#teacher");
+                var subject = form.querySelector("#subject");
+                var group = form.querySelector("#group");
+                var start_time = form.querySelector("#start-time");
+                var end_time = form.querySelector("#end-time");
+                var cab = form.querySelector("#room");
+                var date = form.querySelector("#date");
+                var del = form.querySelector("#del");
+
+                const response = fetch("/delete_pair", {
+                    method: "PUT",
+                    body: JSON.stringify({
+                        teacher: teacher.value,
+                        subject: subject.value,
+                        cabinet: cab.value,
+                        start_time: start_time.value,
+                        end_time: end_time.value,
+                        group: group.value,
+                        date: date.value,
+                        deletion_type: del.value
+                    })
+                })
+            }
+        }
+
+        function close_mw_delete_pair() {
+            modal2.style.display = 'none';
+        }
+
+        function open_mw_replace_pair() {
+            modal3.style.display = 'block';
+            let form1 = modal3.querySelector("div + div").querySelector("div > form");
+            let form2 = modal3.querySelector("div > div > form");
+            
+            var submit_btn = modal3.querySelector("div > .sendbutton")
+            submit_btn.onclick = function () {
+                //получаем инфу о том, что удаляем
+                var teacher1 = form1.querySelector("#teacher");
+                var subject1 = form1.querySelector("#subject");
+                var group1 = form1.querySelector("#group");
+                var start_time1 = form1.querySelector("#start-time");
+                var end_time1 = form1.querySelector("#end-time");
+                var cab1 = form1.querySelector("#room");
+                var date1 = form1.querySelector("#date");
+                var del = form1.querySelector("#del");
+
+                //получаем инфу о том, что добавляем
+                var teacher2 = form2.querySelector("#teacher");
+                var subject2 = form2.querySelector("#subject");
+                var group2 = form2.querySelector("#group");
+                var start_time2 = form2.querySelector("#start-time");
+                var end_time2 = form2.querySelector("#end-time");
+                var cab2 = form2.querySelector("#room");
+                var date2 = form2.querySelector("#date");
+                var type = form2.querySelector("#type");
+
+                const response = fetch("/replace_pair", {
+                    method: "PUT",
+                    body: JSON.stringify({
+                        teacher_before: teacher1.value,
+                        subject_before: subject1.value,
+                        cabinet_before: cab1.value,
+                        start_time_before: start_time1.value,
+                        end_time_before: end_time1.value,
+                        group_before: group1.value,
+                        date_before: date1.value,
+                        deletion_type: del.value,
+
+                        teacher_after: teacher2.value,
+                        subject_after: subject2.value,
+                        cabinet_after: cab2.value,
+                        start_time_after: start_time2.value,
+                        end_time_after: end_time2.value,
+                        group_after: group2.value,
+                        date_after: date2.value,
+                        type: type.value
+                    })
+                })
+            }
+        }
+
+        function close_mw_replace_pair() {
+            modal3.style.display = 'none';
+        }
+
+        function open_mw_get_occup() {
+            modal4.style.display = 'block';
+            let form = modal4.querySelector("div > form");
+            var submit_btn = form.querySelector(".sendbutton")
+            console.log(submit_btn.textContent);
+            submit_btn.onclick = function () {
+                var start_time = form.querySelector("#start-time");
+                var end_time = form.querySelector("#end-time");
+                var cab = form.querySelector("#room");
+                var date = form.querySelector("#date")
+
+                const response = fetch("/get_occup", {
+                    method: "PUT",
+                    body: JSON.stringify({
+                        cabinet: cab.value,
+                        start_time: start_time.value,
+                        end_time: end_time.value,
+                        date: date.value
+                    })
+                })
+            }
+        }
+
+        function close_mw_get_occup() {
+            modal4.style.display = 'none';
+        }
 
         // Для добавления пары
         var modal1 = document.getElementById("myModal1");
@@ -282,61 +432,10 @@
 
         // Для занятости кабинета
         var modal4 = document.getElementById("myModal3");
-        var occup = document.getElementById("occupancy")
-        var span4 = document.getElementById("closeOccupancy")
-
-        function open_mw_add_pair() {
-            modal1.style.display = 'block';
-            let form = document.querySelector("#myModal1 > div > form");
-            var submit_btn = form.querySelector(".sendbutton")
-            submit_btn.onclick = function () {
-                var teacher = form.querySelector("#teacher");
-                var subject = form.querySelector("#subject");
-                var group = form.querySelector("#group");
-                var start_time = form.querySelector("#start-time");
-                var end_time = form.querySelector("#end-time");
-                var cab = form.querySelector("#room");
-
-                const response = fetch("/add_pair", {
-                    method: "PUT",
-                    body: JSON.stringify({
-                        teacher: teacher.value,
-                        subject: subject.value,
-                        cabinet: cab.value,
-                        start_time: start_time.value,
-                        end_time: end_time.value
-                    })
-                })
-            }
-        }
-
-        function close_mw_add_pair() {
-            modal1.style.display = 'none';
-        }
-
-        function open_mw_delete_pair() {
-            modal2.style.display = 'block';
-        }
-
-        function close_mw_delete_pair() {
-            modal2.style.display = 'none';
-        }
-
-        function open_mw_replace_pair() {
-            modal3.style.display = 'block';
-        }
-
-        function close_mw_replace_pair() {
-            modal3.style.display = 'none';
-        }
-
-        function open_mw_replace_occup() {
-            modal4.style.display = 'block';
-        }
-
-        function close_mw_replace_occup() {
-            modal4.style.display = 'none';
-        }
+        var occup = document.getElementById("occupancy");
+        var span4 = document.getElementById("closeOccupancy");
+        var close_replace_pair_btn = document.getElementById("replace-pair-btn");
+        console.log(close_replace_pair_btn);
 
         add.addEventListener("click", open_mw_add_pair);
         span1.addEventListener("click", close_mw_add_pair);
@@ -346,10 +445,11 @@
 
         replace.addEventListener("click", open_mw_replace_pair);
         span3.addEventListener("click", close_mw_replace_pair);
+        close_replace_pair_btn.addEventListener("click", close_mw_replace_pair);
 
-        occup.addEventListener("click", open_mw_replace_occup);
-        span4.addEventListener("click", close_mw_replace_occup);
-
+        occup.addEventListener("click", open_mw_get_occup);
+        span4.addEventListener("click", close_mw_get_occup);
+        
         document.getElementById("openLinkButton").onclick = function () {
             window.open("https://calendar.google.com/calendar/u/0?cid=ZjI1MzQ0ZTI2NDlkOTY3Yzc4NTY2YTA2MWEwNmZhZTY0OTBhMTYyYzlhN2I2NzhlNjFlNjE3MWYxZmFjMzdjMEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t");
         }

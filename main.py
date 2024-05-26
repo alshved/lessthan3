@@ -23,12 +23,20 @@ def add_pair(body=Body()):
 
 
 @app.put("/delete_pair")
-def add_pair(data=Body()):
+def delete_pair(body=Body()):
+    data = json.loads(body)
     print(data)
 
 
-@app.put("/update_pair")
-def add_pair(data=Body()):
+@app.put("/replace_pair")
+def replace_pair(body=Body()):
+    data = json.loads(body)
+    print(data)
+
+
+@app.put("/get_occup")
+def get_occup_pair(body=Body()):
+    data = json.loads(body)
     print(data)
 
 
