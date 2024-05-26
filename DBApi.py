@@ -15,21 +15,23 @@ class DataBase:
     def add_from_json(self, path: str):
         with open(path, encoding="utf-8") as f:
             tmp_data = json.load(f)
-        for d in tmp_data:
-            lesson = tmp_data[d]
-            for les in lesson["lessons"]:
+        for day in tmp_data.keys():
+            if day not in ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']:
+                continue
+            lessons = tmp_data[day]
+            for les in lessons["lessons"]:
                 if les["cabinet"] in self.validation_cabinet:
                     try:
                         self.cursor.execute(
                             "INSERT INTO Class VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                             (
                                 les["cabinet"],
-                                les['group'],
+                                tmp_data['group'],
                                 " ".join(les["teachers"]),
                                 les["time_start"],
                                 les["time_end"],
                                 les["subject"],
-                                lesson["date"],
+                                lessons["date"],
                                 None,
                                 1,
                                 1,
