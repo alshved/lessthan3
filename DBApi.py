@@ -6,7 +6,7 @@ class DataBase:
     def __init__(self, path: str):
         self.path = path
         try:
-            self.connection = sqlite3.connect(path)
+            self.connection = sqlite3.connect(path, check_same_thread=False)
             self.cursor = self.connection.cursor()
         except sqlite3.Error as error:
             print(f"Ошибка подключения: {error}")
@@ -52,7 +52,7 @@ class DataBase:
                     '"Group " NUMERIC, "Teacher" TEXT NOT NULL, '
                     '"TimeStart" TEXT NOT NULL, "TimeFinish" TEXT NOT NULL, '
                     '"Name" TEXT NOT NULL, "Date" TEXT NOT NULL, '
-                    '"GoogleID" TEXT UNIQUE, '
+                    '"id" TEXT UNIQUE, '
                     '"Regularity" BIT, '
                     '"Type"	BIT)'
                 )
@@ -180,7 +180,7 @@ class DataBase:
     def add_id(self, cabinet, time_start, date, google_id):
         try:
             self.cursor.execute(
-                "UPDATE Class SET GoogleID = ? WHERE Cabinet = ? AND TimeStart = ? AND Date = ?",
+                "UPDATE Class SET id = ? WHERE Cabinet = ? AND TimeStart = ? AND Date = ?",
                 (google_id, cabinet, time_start, date),
             )
             self.connection.commit()
@@ -190,11 +190,19 @@ class DataBase:
     def get_id(self, cabinet, time_start, date):
         try:
             return self.cursor.execute(
-                "SELECT GoogleID FROM Class WHERE Cabinet = ? AND TimeStart = ? AND Date = ?",
+                "SELECT id FROM Class WHERE Cabinet = ? AND TimeStart = ? AND Date = ?",
                 (cabinet, time_start, date),
             ).fetchall()[0][0]
         except sqlite3.Error as error:
             print(f"Ошибка при ID: {error}")
+
+    def select_all(self):
+        try:
+            data = self.cursor.execute(f"SELECT * FROM Class").fetchall()
+            res = [DataBase.__from_tuple_to_dict(i) for i in data]
+            return res
+        except sqlite3.Error as error:
+            print(f"Ошибка выбора: {error}")
 
     @staticmethod
     def __from_tuple_to_dict(input_tuple: tuple) -> dict:
@@ -206,7 +214,7 @@ class DataBase:
             "time_finish": input_tuple[4],
             "subject": input_tuple[5],
             "date": input_tuple[6],
-            "google_id" : input_tuple[7],
+            "google_id": input_tuple[7],
             "regularity": input_tuple[8],
             "type": input_tuple[9],
         }
