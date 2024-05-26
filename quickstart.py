@@ -10,7 +10,8 @@ from googleapiclient.errors import HttpError
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
 CALENDARID = 'f25344e2649d967c78566a061a06fae6490a162c9a7b678e61e6171f1fac37c0@group.calendar.google.com'
 
-class googleApi:
+
+class GoogleApi:
 
     def __init__(self):
         self.creds = None
@@ -31,7 +32,6 @@ class googleApi:
                 token.write(self.creds.to_json())
         self.service = build("calendar", "v3", credentials=self.creds)
 
-
     # Создаём расписание пар в Google calendar на заданный период
     # start - время начала периода в формате ГГГГ.ММ.ДД
     # finish - время окончания периода в формате ГГГГ.ММ.ДД
@@ -45,31 +45,30 @@ class googleApi:
         except HttpError as error:
             print(f"An error occurred: {error}")
 
-
     # Создаём одну пару, передаём на вход словарь с информацией о паре
     def load_one_pair(self, pair):
         try:
             new_pair = {
-                    "summary": pair["subject"],
-                    "location": pair["cabinet"],
-                    "start": {
-                        "dateTime": pair["date"].replace(".", "-")
-                        + "T"
-                        + pair["time_start"]
-                        + ":00+03:00"
-                    },
-                    "end": {
-                        "dateTime": pair["date"].replace(".", "-")
-                        + "T"
-                        + pair["time_finish"]
-                        + ":00+03:00"
-                    }
+                "summary": pair["subject"],
+                "location": pair["cabinet"],
+                "start": {
+                    "dateTime": pair["date"].replace(".", "-")
+                                + "T"
+                                + pair["time_start"]
+                                + ":00+03:00"
+                },
+                "end": {
+                    "dateTime": pair["date"].replace(".", "-")
+                                + "T"
+                                + pair["time_finish"]
+                                + ":00+03:00"
                 }
+            }
             if (pair['teacher']):
                 new_pair['description'] = 'Преподаватель - ' + pair['teacher'] + ', группа - ' + str(pair['group'])
             event = (
-                    self.service.events().insert(calendarId=CALENDARID, body=new_pair, sendUpdates='all').execute()
-                )
+                self.service.events().insert(calendarId=CALENDARID, body=new_pair, sendUpdates='all').execute()
+            )
             eventId = event.get('id')
             print(eventId)
             self.s.add_id(pair["cabinet"], pair["time_start"], pair["date"], eventId)
@@ -91,13 +90,11 @@ class googleApi:
         except HttpError as error:
             print(f"An error occurred: {error}")
 
-
     # Удаляем пару из google календаря, передаём на вход словарь с информацией о паре
     def delete_one_pair(self, pair):
         id = self.s.get_id(pair["cabinet"], pair["time_start"], pair["date"])
         event = self.service.events().delete(calendarId=CALENDARID, eventId=id).execute()
         print(event)
-
 
     # Обновляем информацию о паре, на вход передаются два словаря один с информацией о старой паре второй о новой
     def update_one_pair(self, pair, new_pair):

@@ -6,7 +6,9 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.encoders import jsonable_encoder
 import uvicorn
 from DBApi import DataBase
+from quickstart import GoogleApi
 
+google_api = GoogleApi()
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static", html=True), name="static")
 
@@ -25,12 +27,30 @@ def add_pair(body=Body()):
     db.add_lesson(data['cabinet'], data['group'], data['teacher'],
                   data['start_time'], data['end_time'], data['subject'], data['date'],
                   data['type'] == 'one')
+    pair = dict()
+    pair['subject'] = data['subject']
+    pair['cabinet'] = data['cabinet']
+    pair['date'] = data['date']
+    pair['time_start'] = data['start_time']
+    pair['time_finish'] = data['end_time']
+    pair['teacher'] = data['teacher']
+    pair['group'] = data['group']
+    google_api.load_one_pair(pair)
 
 
 @app.put("/delete_pair")
 def delete_pair(body=Body()):
     data = json.loads(body)
     print(data)
+    pair = dict()
+    pair['subject'] = data['subject']
+    pair['cabinet'] = data['cabinet']
+    pair['date'] = data['date']
+    pair['time_start'] = data['start_time']
+    pair['time_finish'] = data['end_time']
+    pair['teacher'] = data['teacher']
+    pair['group'] = data['group']
+    google_api.delete_one_pair(pair)
     db = DataBase("LessonsDB.db")
     db.delete_lesson(data['cabinet'], data['start_time'], data['date'])
 
@@ -39,11 +59,31 @@ def delete_pair(body=Body()):
 def replace_pair(body=Body()):
     data = json.loads(body)
     print(data)
+    pair_old = dict()
+    pair_old['subject'] = data['subject_before']
+    pair_old['cabinet'] = data['cabinet_before']
+    pair_old['date'] = data['date_before']
+    pair_old['time_start'] = data['start_time_before']
+    pair_old['time_finish'] = data['end_time_before']
+    pair_old['teacher'] = data['teacher_before']
+    pair_old['group'] = data['group_before']
+
+    pair_new = dict()
+    pair_new['subject'] = data['subject_after']
+    pair_new['cabinet'] = data['cabinet_after']
+    pair_new['date'] = data['date_after']
+    pair_new['time_start'] = data['start_time_after']
+    pair_new['time_finish'] = data['end_time_after']
+    pair_new['teacher'] = data['teacher_after']
+    pair_new['group'] = data['group_after']
+
+    google_api.update_one_pair(pair_old, pair_new)
     db = DataBase("LessonsDB.db")
     db.delete_lesson(data['cabinet_before'], data['start_time_before'], data['date_before'])
     db.add_lesson(data['cabinet_after'], data['group_after'], data['teacher_after'],
                   data['start_time_after'], data['end_time_after'], data['subject_after'], data['date_after'],
                   data['type'] == 'one')
+    print("succesfully replaced")
 
 
 @app.put("/get_occup")
@@ -65,6 +105,10 @@ def sync_db():
     print('sync')
 
 
+if __name__ == "__main__":
+    # поставить reload=False для прода
+    uvicorn.run("main:app", reload=True)
+    google_api = GoogleApi()
 # @app.get("/StyleSheet.css")
 # def get_css():
 #     return FileResponse("StyleSheet.css")#
@@ -72,8 +116,3 @@ def sync_db():
 # def get_js():
 #     print("s")
 #     return FileResponse("main.js")
-
-
-if __name__ == "__main__":
-    # поставить reload=False для прода
-    uvicorn.run("main:app", reload=True)
