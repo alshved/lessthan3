@@ -149,7 +149,7 @@ class SheduleScraperMAI:
                         cur['teachers'] = []
                         cur['cabinet'] = ""
                         for ind in range(1, len(lesson_info)):
-                            if SheduleScraperMAI.has_numbers(lesson_info[ind].text):
+                            if SheduleScraperMAI.has_numbers(lesson_info[ind].text) or lesson_info[ind].text == "--каф.":
                                 cur['cabinet'] += lesson_info[ind].text + " "
                             else:
                                 cur['teachers'].append(lesson_info[ind].text)
@@ -157,7 +157,9 @@ class SheduleScraperMAI:
                         if subject is None or cur['subject'] == subject:
                             lessons.append(cur)
                 if len(lessons) != 0:
-                    res[week_day] = dict({'lessons': lessons, 'date': str(cur_date).replace('-', '.')})
+                    res[week_day] = dict(
+                        {'lessons': lessons, 'date': str(cur_date).replace('-', '.'), 'week': week, 'group': group,
+                         'inst': inst, 'course': course})
 
             with open(data_path, 'w', encoding='utf-8') as fp:
                 json.dump(res, fp, ensure_ascii=False, indent=2)
@@ -274,4 +276,4 @@ class SheduleScraperMAI:
 
 
 s = SheduleScraperMAI("https://mai.ru/education/studies/schedule/")
-s.scrap_by_group_and_week("8", "1", "М8О-110Б-23", "20.05.2024-26.05.2024")
+s.scrap_by_group_and_week("8", "2", "М8О-210Б-22", "20.05.2024-26.05.2024", try_cache=False)
