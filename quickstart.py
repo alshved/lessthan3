@@ -10,7 +10,6 @@ from googleapiclient.errors import HttpError
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
 CALENDARID = 'f25344e2649d967c78566a061a06fae6490a162c9a7b678e61e6171f1fac37c0@group.calendar.google.com'
 
-
 class googleApi:
 
     def __init__(self):
@@ -91,8 +90,6 @@ class googleApi:
 
         except HttpError as error:
             print(f"An error occurred: {error}")
-
-
 
 
     # Удаляем пару из google календаря, передаём на вход словарь с информацией о паре
