@@ -149,7 +149,8 @@ class SheduleScraperMAI:
                         cur['teachers'] = []
                         cur['cabinet'] = ""
                         for ind in range(1, len(lesson_info)):
-                            if SheduleScraperMAI.has_numbers(lesson_info[ind].text) or lesson_info[ind].text == "--каф.":
+                            if (SheduleScraperMAI.has_numbers(lesson_info[ind].text)
+                                    or lesson_info[ind].text == "--каф."):
                                 cur['cabinet'] += lesson_info[ind].text + " "
                             else:
                                 cur['teachers'].append(lesson_info[ind].text)
@@ -158,9 +159,11 @@ class SheduleScraperMAI:
                             lessons.append(cur)
                 if len(lessons) != 0:
                     res[week_day] = dict(
-                        {'lessons': lessons, 'date': str(cur_date).replace('-', '.'), 'week': week, 'group': group,
-                         'inst': inst, 'course': course})
-
+                        {'lessons': lessons, 'date': str(cur_date).replace('-', '.')})
+            res['week'] = week
+            res['group'] = group
+            res['inst'] = inst
+            res['course'] = course
             with open(data_path, 'w', encoding='utf-8') as fp:
                 json.dump(res, fp, ensure_ascii=False, indent=2)
         driver.quit()
@@ -235,7 +238,7 @@ class SheduleScraperMAI:
         driver.quit()
         return weeks
 
-    def scrap_available_groups(self, institute, course):
+    def scrap_available_groups(self, institute, course, try_cache=True):
         """
         Получает все группы для определенного института и курса
         :param institute: номер требуемого института
@@ -243,6 +246,10 @@ class SheduleScraperMAI:
         :return: список строк с названиями доступных групп. Если групп нет, то список будет пустой
         """
 
+        data_path = path.join(self.cache_dir, f'{institute}i{course}c')
+        if try_cache and path.exists(data_path):
+            with open(data_path, 'r', encoding='utf-8') as fp:
+                return json.load(fp)
         self._driver = webdriver.Chrome()
         driver = self._driver
         self.__go_to_groups_page__(course, institute)
@@ -254,6 +261,8 @@ class SheduleScraperMAI:
             #     если нет групп, то и контейнера для них нет
             res = []
         driver.quit()
+        with open(data_path, 'w', encoding='utf-8') as fp:
+            json.dump(res, fp, ensure_ascii=False, indent=2)
         return res
 
     # пока непонянто, надо это или нет. Функция для скраппинга ВСЕХ институтов, ВСЕХ групп, ВСЕХ недель
@@ -273,7 +282,3 @@ class SheduleScraperMAI:
     #                 for week in available_weeks:
     #                     print(inst, course, g, week)
     #                     self.scrap_by_group_and_week(inst, g, week, course, try_cache=True)
-
-
-s = SheduleScraperMAI("https://mai.ru/education/studies/schedule/")
-s.scrap_by_group_and_week("8", "2", "М8О-210Б-22", "20.05.2024-26.05.2024", try_cache=False)
