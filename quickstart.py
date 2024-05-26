@@ -10,10 +10,11 @@ from googleapiclient.errors import HttpError
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
 CALENDARID = 'f25344e2649d967c78566a061a06fae6490a162c9a7b678e61e6171f1fac37c0@group.calendar.google.com'
 
- 
+# Создаём расписание пар в Google calendar на заданный период
+# start - время начала периода в формате ГГГГ.ММ.ДД
+# finish - время окончания периода в формате ГГГГ.ММ.ДД
 def load_weekly_schedule(start, finish):
     try:
-        # Call the Calendar API
         pair = []
         pairs = s.load_lessons_by_dates(start, finish)
         for pair in pairs:
@@ -22,7 +23,22 @@ def load_weekly_schedule(start, finish):
     except HttpError as error:
         print(f"An error occurred: {error}")
 
-      
+
+# Удаляем все пары из заданного периода 
+# start - время начала периода в формате ГГГГ.ММ.ДД
+# finish - время окончания периода в формате ГГГГ.ММ.ДД
+def delete_weekly_schedule(start, finish):
+    try:
+        pair = []
+        pairs = s.load_lessons_by_dates(start, finish)
+        for pair in pairs:
+            delete_one_pair(pair)
+
+    except HttpError as error:
+        print(f"An error occurred: {error}")
+
+
+# Создаём одну пару, передаём на вход словарь с информацией о паре
 def load_one_pair(pair):
     try:
         new_pair = {
@@ -44,7 +60,7 @@ def load_one_pair(pair):
         if (pair['teacher']):
             new_pair['description'] = 'Преподаватель - ' + pair['teacher'] + ', группа - ' + str(pair['group'])
         event = (
-                service.events().insert(calendarId=CALENDARID, body=new_pair).execute()
+                service.events().insert(calendarId=CALENDARID, body=new_pair, sendUpdates='all').execute()
             )
         eventId = event.get('id')
         s.add_id(pair["cabinet"], pair["time_start"], pair["date"], eventId)
@@ -54,11 +70,14 @@ def load_one_pair(pair):
         print(f"An error occurred: {error}")
 
 
+# Удаляем пару из google календаря, передаём на вход словарь с информацией о паре
 def delete_one_pair(pair):
     id = s.get_id(pair["cabinet"], pair["time_start"], pair["date"])
     event = service.events().delete(calendarId=CALENDARID, eventId=id).execute()
     print(event)
 
+
+# Обновляем информацию о паре, на вход передаются два словаря один с информацией о старой паре второй о новой
 def update_one_pair(pair, new_pair):
     delete_one_pair(pair)
     load_one_pair(new_pair)
@@ -66,7 +85,7 @@ def update_one_pair(pair, new_pair):
 
 if __name__ == "__main__":
     creds = None
-    s = DBApi.data_base("LessonsDB.db")
+    s = DBApi.DataBase("LessonsDB.db")
     # The file token.json stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
     # time.
@@ -79,8 +98,7 @@ if __name__ == "__main__":
         else:
             flow = InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)
             creds = flow.run_local_server(port=0)
-        # Save the credentials for the next run
         with open("token.json", "w") as token:
             token.write(creds.to_json())
     service = build("calendar", "v3", credentials=creds)
-    load_weekly_schedule("2024.02.14", "2024.02.16")
+    
