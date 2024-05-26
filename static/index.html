@@ -219,7 +219,7 @@
                     <p style="font-size: 20px;">Что меняем</p>
                     <form id="modalForm">
                         <label for="teacher">Фамилия преподователя:</label>
-                        <input type="text" id="teacher" name="teacher" required>
+                        <input type="text" id="teacher" name="teacher" value="" required>
                         <label for="subject">Предмет:</label>
                         <input type="text" id="subject" name="subject" required>
                         <label for="subject">Группа:</label>
@@ -407,8 +407,16 @@
                         start_time: start_time.value,
                         end_time: end_time.value,
                         date: date.value
-                    })
+                    }),
                 })
+                console.log('s');
+                response.then(function (value) {
+                    if (value.headers.get('result') == "True") {
+                        alert("Кабинет занят");
+                    } else {
+                        alert("Кабинет свободен");
+                    }
+                });                
             }
         }
 
@@ -436,7 +444,6 @@
         var occup = document.getElementById("occupancy");
         var span4 = document.getElementById("closeOccupancy");
         var close_replace_pair_btn = document.getElementById("replace-pair-btn");
-        console.log(close_replace_pair_btn);
 
         var sync_btn = document.getElementById("sync");
         sync_btn.addEventListener("click", function () {

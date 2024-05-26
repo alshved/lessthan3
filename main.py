@@ -1,9 +1,11 @@
 import json
 
 from fastapi import FastAPI, Body
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response, JSONResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi.encoders import jsonable_encoder
 import uvicorn
+from DBApi import DataBase
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static", html=True), name="static")
@@ -18,25 +20,39 @@ app.mount("/static", StaticFiles(directory="static", html=True), name="static")
 @app.put("/add_pair")
 def add_pair(body=Body()):
     data = json.loads(body)
+    db = DataBase("LessonsDB.db")
     print(data)
+    db.add_lesson(data['cabinet'], data['group'], data['teacher'],
+                  data['start_time'], data['end_time'], data['subject'], data['date'],
+                  data['type'] == 'one')
 
 
 @app.put("/delete_pair")
 def delete_pair(body=Body()):
     data = json.loads(body)
     print(data)
+    db = DataBase("LessonsDB.db")
+    db.delete_lesson(data['cabinet'], data['start_time'], data['date'])
 
 
 @app.put("/replace_pair")
 def replace_pair(body=Body()):
     data = json.loads(body)
     print(data)
+    db = DataBase("LessonsDB.db")
+    db.delete_lesson(data['cabinet_before'], data['start_time_before'], data['date_before'])
+    db.add_lesson(data['cabinet_after'], data['group_after'], data['teacher_after'],
+                  data['start_time_after'], data['end_time_after'], data['subject_after'], data['date_after'],
+                  data['type'] == 'one')
 
 
 @app.put("/get_occup")
 def get_occup_pair(body=Body()):
     data = json.loads(body)
     print(data)
+    db = DataBase("LessonsDB.db")
+    res = db.is_lesson_in_table(data['cabinet'], data['start_time'], data['date'])
+    return Response(content="get_occup", media_type="text/plain", headers={"result": str(res)})
 
 
 @app.get("/")

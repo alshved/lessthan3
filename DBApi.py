@@ -93,7 +93,7 @@ class DataBase:
                     and cabinet in self.validation_cabinet
             ):
                 self.cursor.execute(
-                    "INSERT INTO Class VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    "INSERT INTO Class VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     (
                         cabinet,
                         group,
@@ -102,6 +102,7 @@ class DataBase:
                         time_end,
                         name,
                         date,
+                        None,
                         regularity,
                         0,
                     ),
