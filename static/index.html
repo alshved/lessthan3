@@ -1,92 +1,372 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Веб-сервис отслеживания занятости компьютерных классов</title>
-    <link rel="stylesheet" type="text/css" href="static/StyleSheet.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Модальное окно с вертикальной разделяющей полосой</title>
+    <link rel="stylesheet" href="static/styles.css">
 </head>
 <body>
 
-    <div class="modal" id="exampleModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Изменить занятость кабинета</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="time" id="time" placeholder="На сколько занят кабинет?" />
-                    <input type="text" id="who" placeholder="Преподаватель" />
-                    <input list="cabinet_list" type="text" id="cabinet" placeholder="Номер кабинета" />
+    <img src="https://www.newstaff.ru/2023/11/17/1521655b9e77ea3f390b41f5ec89f3f10a67cb59.jpg" alt="" class="image1">
+    <img src="https://i2.wp.com/miro.medium.com/1*29NeeIGT0BElEBNfzE_VlQ.jpeg" alt="" class="image2">
 
-                    <datalist id="cabinet_list">
-                        <option value="320" />
-                        <option value="it-15" />
-                        <option value="it-17" />
-                    </datalist>
+    <!--ЦЕНТРАЛЬНО ОКНО-->
+    <div class="container">
+        <h1>Что-то странное</h1>
+        <button class="button" id="addPair">Добавить пару</button>
+        <button class="button" id="deletePair">Удалить пару</button>
+        <button class="button" id="replacePair">Изменить пару</button>
+        <button class="button" id="openLinkButton">Гугл календарь</button>
+        <button class="button" id="occupancy">Занятость кабинета</button>
+
+        <!--ПРИВЕДЕННЫЕ НИЖЕ ДВЕ КНОПКИ ПОКА БЕЗ ФУНКЦИОНАЛА-->
+        <button class="button">Обновить данные</button>
+        <button class="button">Запуск парсера</button>
+
+        <!--Занятость кабинета-->
+        <div id="myModal3" class="modal">
+            <div class="modal-content">
+                <span class="close" id="closeOccupancy">&times;</span>
+                <p style="font-size: 20px;">Занятость кабинета</p>
+                <form id="modalForm">
+                    <label for="time">Время начала:</label>
+                    <input type="time" id="start-time" name="start-time" required>
+                    <label for="end-time">Время конца:</label>
+                    <input type="time" id="end-time" name="end-time" required>
+                    <label for="room">Кабинет:</label>
+                    <select id="room" name="room" required>
+                        <option value="it-1">it-1</option>
+                        <option value="it-2">it-2</option>
+                        <option value="it-3">it-3</option>
+                        <option value="it-4">it-4</option>
+                        <option value="it-5">it-5</option>
+                        <option value="it-6">it-6</option>
+                        <option value="it-7">it-7</option>
+                        <option value="it-8">it-8</option>
+                        <option value="it-9">it-9</option>
+                        <option value="it-10">it-10</option>
+                        <option value="it-11">it-11</option>
+                        <option value="it-12">it-12</option>
+                        <option value="it-13">it-13</option>
+                        <option value="it-14">it-14</option>
+                        <option value="it-15">it-15</option>
+                        <option value="it-16">it-16</option>
+                        <option value="it-17">it-17</option>
+                        <option value="320">320</option>
+                        <option value="322">322</option>
+                    </select>
+                    <label for="date">Выбор даты:</label>
+                    <input type="date" id="date" name="date" required>
+                    <button type="submit" class="sendbutton">Отправить</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Модальное окно для "ДОБАВЛЕНИЯ ПАРЫ" -->
+        <div id="myModal1" class="modal">
+            <div class="modal-content">
+                <span class="close" id="closeModalAdd">&times;</span>
+                <p style="font-size: 20px;">Добавление пары</p>
+
+                <form id="modalForm">
+                    <label for="teacher">Фамилия преподователя:</label>
+                    <input type="text" id="teacher" name="teacher" required>
+                    <label for="subject">Предмет:</label>
+                    <input type="text" id="subject" name="subject" required>
+                    <label for="subject">Группа:</label>
+                    <input type="text" id="group" name="group" required>
+                    <label for="time">Время начала:</label>
+                    <input type="time" id="start-time" name="start-time" required>
+                    <label for="end-time">Время конца:</label>
+                    <input type="time" id="end-time" name="end-time" required>
+                    <label for="room">Кабинет:</label>
+                    <select id="room" name="room" required>
+                        <option value="it-1">it-1</option>
+                        <option value="it-2">it-2</option>
+                        <option value="it-3">it-3</option>
+                        <option value="it-4">it-4</option>
+                        <option value="it-5">it-5</option>
+                        <option value="it-6">it-6</option>
+                        <option value="it-7">it-7</option>
+                        <option value="it-8">it-8</option>
+                        <option value="it-9">it-9</option>
+                        <option value="it-10">it-10</option>
+                        <option value="it-11">it-11</option>
+                        <option value="it-12">it-12</option>
+                        <option value="it-13">it-13</option>
+                        <option value="it-14">it-14</option>
+                        <option value="it-15">it-15</option>
+                        <option value="it-16">it-16</option>
+                        <option value="it-17">it-17</option>
+                        <option value="320">320</option>
+                        <option value="322">322</option>
+                    </select>
+                    <label for="date">Выбор даты:</label>
+                    <input type="date" id="date" name="date" required>
+                    <label for="type">Выбор типа:</label>
+                    <select name="type" id="type" required>
+                        <option value="Одноразовый">Одноразовый</option>
+                        <option value="Еженедельный">Еженедельный</option>
+                    </select>
+                    <button type="submit" class="sendbutton">Отправить</button>
+                </form>
+            </div>
+        </div>
+
+        <!--Модальное окно для "УДАЛЕНИЯ ПАРЫ"-->
+        <div id="myModal2" class="modal">
+            <div class="modal-content">
+                <span class="close" id="closeModalDel">&times;</span>
+                <p style="font-size: 20px;">Удаление пары</p>
+
+                <form id="modalForm">
+                    <label for="teacher">Фамилия преподователя:</label>
+                    <input type="text" id="teacher" name="teacher" required>
+                    <label for="subject">Предмет:</label>
+                    <input type="text" id="subject" name="subject" required>
+                    <label for="subject">Группа:</label>
+                    <input type="text" id="group" name="group" required>
+                    <label for="time">Время начала:</label>
+                    <input type="time" id="start-time" name="start-time" required>
+                    <label for="end-time">Время конца:</label>
+                    <input type="time" id="end-time" name="end-time" required>
+                    <label for="room">Кабинет:</label>
+                    <select name="room" id="room" required>
+                        <option value="it-1">it-1</option>
+                        <option value="it-2">it-2</option>
+                        <option value="it-3">it-3</option>
+                        <option value="it-4">it-4</option>
+                        <option value="it-5">it-5</option>
+                        <option value="it-6">it-6</option>
+                        <option value="it-7">it-7</option>
+                        <option value="it-8">it-8</option>
+                        <option value="it-9">it-9</option>
+                        <option value="it-10">it-10</option>
+                        <option value="it-11">it-11</option>
+                        <option value="it-12">it-12</option>
+                        <option value="it-13">it-13</option>
+                        <option value="it-14">it-14</option>
+                        <option value="it-15">it-15</option>
+                        <option value="it-16">it-16</option>
+                        <option value="it-17">it-17</option>
+                        <option value="320">320</option>
+                        <option value="322">322</option>
+                    </select>
+                    <label for="date">Выбор даты:</label>
+                    <input type="date" id="date" name="date" required>
+                    <label for="del">Сколько пар удалить:</label>
+                    <select name="del" id="del" required>
+                        <option value="1">одну</option>
+                        <option value="все">все</option>
+                    </select>
+                    <button type="submit" class="sendbutton">Отправить</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- МОДАЛЬНОЕ ОКНО ДЛЯ ИЗМЕНЕНИЯ ПАРЫ-->
+        <div id="modal3" class="modal">
+            <div class="modal-content1">
+                <span class="close" id="closeReplace">&times;</span>
+                <div class="left-section">
+                    <p style="font-size: 20px;">Что меняем</p>
+                    <form id="modalForm">
+                        <label for="teacher">Фамилия преподователя:</label>
+                        <input type="text" id="teacher" name="teacher" required>
+                        <label for="subject">Предмет:</label>
+                        <input type="text" id="subject" name="subject" required>
+                        <label for="subject">Группа:</label>
+                        <input type="text" id="group" name="group" required>
+                        <label for="time">Время начала:</label>
+                        <input type="time" id="start-time" name="start-time" required>
+                        <label for="end-time">Время конца:</label>
+                        <input type="time" id="end-time" name="end-time" required>
+                        <label for="room">Кабинет:</label>
+                        <select id="room" name="room" required>
+                            <option value="it-1">it-1</option>
+                            <option value="it-2">it-2</option>
+                            <option value="it-3">it-3</option>
+                            <option value="it-4">it-4</option>
+                            <option value="it-5">it-5</option>
+                            <option value="it-6">it-6</option>
+                            <option value="it-7">it-7</option>
+                            <option value="it-8">it-8</option>
+                            <option value="it-9">it-9</option>
+                            <option value="it-10">it-10</option>
+                            <option value="it-11">it-11</option>
+                            <option value="it-12">it-12</option>
+                            <option value="it-13">it-13</option>
+                            <option value="it-14">it-14</option>
+                            <option value="it-15">it-15</option>
+                            <option value="it-16">it-16</option>
+                            <option value="it-17">it-17</option>
+                            <option value="320">320</option>
+                            <option value="322">322</option>
+                        </select>
+                        <label for="date">Выбор даты:</label>
+                        <input type="date" id="date" name="date" required>
+                        <label for="type">Выбор типа:</label>
+                        <select name="type" id="type" required>
+                            <option value="Одноразовый">Одноразовый</option>
+                            <option value="Еженедельный">Еженедельный</option>
+                        </select>
+                    </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                    <button type="button" id="submit-btn" class="btn btn-primary">Сохранить изменения</button>
+
+                <div class="right-section">
+                    <p style="font-size: 20px;">На что меняем</p>
+                    <form id="modalForm">
+                        <label for="teacher">Фамилия преподователя:</label>
+                        <input type="text" id="teacher" name="teacher" required>
+                        <label for="subject">Предмет:</label>
+                        <input type="text" id="subject" name="subject" required>
+                        <label for="subject">Группа:</label>
+                        <input type="text" id="group" name="group" required>
+                        <label for="time">Время начала:</label>
+                        <input type="time" id="start-time" name="start-time" required>
+                        <label for="end-time">Время конца:</label>
+                        <input type="time" id="end-time" name="end-time" required>
+                        <label for="room">Кабинет:</label>
+                        <select name="room" id="room" required>
+                            <option value="it-1">it-1</option>
+                            <option value="it-2">it-2</option>
+                            <option value="it-3">it-3</option>
+                            <option value="it-4">it-4</option>
+                            <option value="it-5">it-5</option>
+                            <option value="it-6">it-6</option>
+                            <option value="it-7">it-7</option>
+                            <option value="it-8">it-8</option>
+                            <option value="it-9">it-9</option>
+                            <option value="it-10">it-10</option>
+                            <option value="it-11">it-11</option>
+                            <option value="it-12">it-12</option>
+                            <option value="it-13">it-13</option>
+                            <option value="it-14">it-14</option>
+                            <option value="it-15">it-15</option>
+                            <option value="it-16">it-16</option>
+                            <option value="it-17">it-17</option>
+                            <option value="320">320</option>
+                            <option value="322">322</option>
+                        </select>
+                        <label for="date">Выбор даты:</label>
+                        <input type="date" id="date" name="date" required>
+                        <label for="del">Сколько пар удалить:</label>
+                        <select name="del" id="del" required>
+                            <option value="1">одну</option>
+                            <option value="все">все</option>
+                        </select>
+                    </form>
                 </div>
+                <button type="submit" class="sendbutton">Отправить</button>
             </div>
         </div>
     </div>
-    <table>
-        <caption><b>Занятость компьютерных классов</b></caption>
-        <thead>
-            <tr>
-                <th>Номер кабинета</th>
-                <th>Кто занял</th>
-                <th>Телеграм преподавателся</th>
-                <th>Когда занял</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
-                    <button type="button"
-                            data-bs-toggle="modal"
-                            data-bs-target="#exampleModal">
-                        320
-                    </button>
-                </td>
-                <td id="teacher1">Почечура</td>
-                <td>telegram</td>
-                <td>вчера</td>
-            </tr>
-            <tr>
-                <td>
-                    <button type="button"
-                            data-bs-toggle="modal"
-                            data-bs-target="#exampleModal">
-                        it-15
-                    </button>
-                </td>
-                <td>Петр Жабин</td>
-                <td>telegram</td>
-                <td>позавчера</td>
-            </tr>
-            <tr>
-                <td>
-                    <button type="button"
-                            data-bs-toggle="modal"
-                            data-bs-target="#exampleModal">
-                        it-17
-                    </button>
-                </td>
-                <td>Крылов</td>
-                <td>telegram</td>
-                <td>с утра</td>
-            </tr>
-        </tbody>
-    </table>
-    <script src="static/main.js"></script>
+
+    <script>
+
+        // Для добавления пары
+        var modal1 = document.getElementById("myModal1");
+        var add = document.getElementById('addPair');
+        var span1 = document.getElementById('closeModalAdd');
+
+        // Для удаления пары
+        var modal2 = document.getElementById("myModal2");
+        var del = document.getElementById('deletePair');
+        var span2 = document.getElementById('closeModalDel');
+
+        // Для замены пары
+        var modal3 = document.getElementById('modal3');
+        var replace = document.getElementById('replacePair');
+        var span3 = document.getElementById('closeReplace');
+
+        // Для занятости кабинета
+        var modal4 = document.getElementById("myModal3");
+        var occup = document.getElementById("occupancy")
+        var span4 = document.getElementById("closeOccupancy")
+
+        function open_mw_add_pair() {
+            modal1.style.display = 'block';
+            let form = document.querySelector("#myModal1 > div > form");
+            var submit_btn = form.querySelector(".sendbutton")
+            submit_btn.onclick = function () {
+                var teacher = form.querySelector("#teacher");
+                var subject = form.querySelector("#subject");
+                var group = form.querySelector("#group");
+                var start_time = form.querySelector("#start-time");
+                var end_time = form.querySelector("#end-time");
+                var cab = form.querySelector("#room");
+
+                const response = fetch("/add_pair", {
+                    method: "PUT",
+                    body: JSON.stringify({
+                        teacher: teacher.value,
+                        subject: subject.value,
+                        cabinet: cab.value,
+                        start_time: start_time.value,
+                        end_time: end_time.value
+                    })
+                })
+            }
+        }
+
+        function close_mw_add_pair() {
+            modal1.style.display = 'none';
+        }
+
+        function open_mw_delete_pair() {
+            modal2.style.display = 'block';
+        }
+
+        function close_mw_delete_pair() {
+            modal2.style.display = 'none';
+        }
+
+        function open_mw_replace_pair() {
+            modal3.style.display = 'block';
+        }
+
+        function close_mw_replace_pair() {
+            modal3.style.display = 'none';
+        }
+
+        function open_mw_replace_occup() {
+            modal4.style.display = 'block';
+        }
+
+        function close_mw_replace_occup() {
+            modal4.style.display = 'none';
+        }
+
+        add.addEventListener("click", open_mw_add_pair);
+        span1.addEventListener("click", close_mw_add_pair);
+
+        del.addEventListener("click", open_mw_delete_pair);
+        span2.addEventListener("click", close_mw_delete_pair);
+
+        replace.addEventListener("click", open_mw_replace_pair);
+        span3.addEventListener("click", close_mw_replace_pair);
+
+        occup.addEventListener("click", open_mw_replace_occup);
+        span4.addEventListener("click", close_mw_replace_occup);
+
+        document.getElementById("openLinkButton").onclick = function () {
+            window.open("https://calendar.google.com/calendar/u/0?cid=ZjI1MzQ0ZTI2NDlkOTY3Yzc4NTY2YTA2MWEwNmZhZTY0OTBhMTYyYzlhN2I2NzhlNjFlNjE3MWYxZmFjMzdjMEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t");
+        }
+
+        window.onclick = function (event) {
+            if (event.target == modal1) {
+                modal1.style.display = 'none';
+            } else if (event.target == modal2) {
+                modal2.style.display = 'none';
+            } else if (event.target == modal3) {
+                modal3.style.display = 'none';
+            } else if (event.target == modal4) {
+                modal4.style.display = 'none';
+            }
+        }
+
+    </script>
 
 </body>
 </html>

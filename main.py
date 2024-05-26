@@ -1,3 +1,5 @@
+import json
+
 from fastapi import FastAPI, Body
 from fastapi.responses import HTMLResponse
 from fastapi.responses import FileResponse
@@ -7,15 +9,27 @@ import uvicorn
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static", html=True), name="static")
 
+
 # для тестирования использовать Chrome, другие браузеры как то странно кэшируют файлы с кодом и не обновляют их
 
 
 # cntrl + shift + r чтобы обновить
-@app.put("/test")
-def get_info(data=Body()):
-    print("received put request from front. Request info:")
+
+
+@app.put("/add_pair")
+def add_pair(body=Body()):
+    data = json.loads(body)
     print(data)
-    return data
+
+
+@app.put("/delete_pair")
+def add_pair(data=Body()):
+    print(data)
+
+
+@app.put("/update_pair")
+def add_pair(data=Body()):
+    print(data)
 
 
 @app.get("/")
