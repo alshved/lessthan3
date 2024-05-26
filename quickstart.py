@@ -1,5 +1,5 @@
 import os.path
-import DB_api
+import DBApi
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -8,52 +8,66 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
+CALENDARID = 'f25344e2649d967c78566a061a06fae6490a162c9a7b678e61e6171f1fac37c0@group.calendar.google.com'
 
  
-def Load_Weekly_Schedule(week):
+def load_weekly_schedule(start, finish):
     try:
         # Call the Calendar API
         pair = []
-        pairs = DB_api.s.Load_Lessons_By_Week(week)
+        pairs = s.load_lessons_by_dates(start, finish)
         for pair in pairs:
-            Load_One_Pair(pair)
+            load_one_pair(pair)
+            delete_one_pair(pair)
 
     except HttpError as error:
         print(f"An error occurred: {error}")
 
       
-def Load_One_Pair(pair):
+def load_one_pair(pair):
     try:
-      service = build("calendar", "v3", credentials=creds)
-      new_pair = {
-                  "summary": pair["subject"],
-                  "location": pair["cabinet"],
-                  "start": {
-                      "dateTime": pair["date"].replace(".", "-")
-                      + "T"
-                      + pair["time_start"]
-                      + ":00+03:00"
-                  },
-                  "end": {
-                      "dateTime": pair["date"].replace(".", "-")
-                      + "T"
-                      + pair["time_finish"]
-                      + ":00+03:00"
-                  }
+        new_pair = {
+                "summary": pair["subject"],
+                "location": pair["cabinet"],
+                "start": {
+                    "dateTime": pair["date"].replace(".", "-")
+                    + "T"
+                    + pair["time_start"]
+                    + ":00+03:00"
+                },
+                "end": {
+                    "dateTime": pair["date"].replace(".", "-")
+                    + "T"
+                    + pair["time_finish"]
+                    + ":00+03:00"
+                }
               }
-      if (pair['teacher']):
-          new_pair['description'] = 'Преподаватель - ' + pair['teacher'] + ', группа - ' + str(pair['group'])
-      event = (
-                  service.events().insert(calendarId="primary", body=new_pair).execute()
-              )
-      print("Event created: %s" % (event.get("htmlLink")))
+        if (pair['teacher']):
+            new_pair['description'] = 'Преподаватель - ' + pair['teacher'] + ', группа - ' + str(pair['group'])
+        event = (
+                service.events().insert(calendarId=CALENDARID, body=new_pair).execute()
+            )
+        eventId = event.get('id')
+        s.add_id(pair["cabinet"], pair["time_start"], pair["date"], eventId)
+        print("Event created: %s" % (event.get("htmlLink")))
 
     except HttpError as error:
         print(f"An error occurred: {error}")
 
 
+def delete_one_pair(pair):
+    id = s.get_id(pair["cabinet"], pair["time_start"], pair["date"])
+    event = service.events().delete(calendarId=CALENDARID, eventId=id).execute()
+    print(event)
+
+def update_one_pair(pair, new_pair):
+    delete_one_pair(pair)
+    load_one_pair(new_pair)
+
+
 if __name__ == "__main__":
     creds = None
+    s = DBApi.data_base("LessonsDB.db")
     # The file token.json stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
     # time.
@@ -69,4 +83,5 @@ if __name__ == "__main__":
         # Save the credentials for the next run
         with open("token.json", "w") as token:
             token.write(creds.to_json())
-    Load_Weekly_Schedule("2024.02.14-2024.02.16")
+    service = build("calendar", "v3", credentials=creds)
+    load_weekly_schedule("2024.02.14", "2024.02.16")
