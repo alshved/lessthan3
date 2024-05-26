@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Расписание it этажа</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="forall.css">
 </head>
 <body>
 
@@ -20,16 +20,6 @@
     <img src="https://www.newstaff.ru/2023/11/17/1521655b9e77ea3f390b41f5ec89f3f10a67cb59.jpg" alt="" class="image1">
     <img src="https://i2.wp.com/miro.medium.com/1*29NeeIGT0BElEBNfzE_VlQ.jpeg" alt="" class="image2">
 
-    <!-- QR-COD -->
-    <div class="bottomLeft">
-        <p>Отсканируй и попадешь на наш гугл календарь</p>
-        <img src="http://qrcoder.ru/code/?https%3A%2F%2Fcalendar.google.com%2Fcalendar%2Fu%2F0%3Fcid%3DZjI1MzQ0ZTI2NDlkOTY3Yzc4NTY2YTA2MWEwNmZhZTY0OTBhMTYyYzlhN2I2NzhlNjFlNjE3MWYxZmFjMzdjMEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&4&0" alt="QR-cod">
-    </div>
-
-    <div class="upperRight">
-        <p>Здесь что то должно быть (по хорошему)</p>
-    </div>
-
     <!--ЦЕНТРАЛЬНО ОКНО-->
     <div class="container">
         <h1>Что-то странное</h1>
@@ -38,14 +28,16 @@
         <button class="button" id="replacePair">Изменить пару</button>
         <button class="button" id="openLinkButton">Гугл календарь</button>
         <button class="button" onclick="window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ')">Самая важная кнопка</button>
+        
         <!--ПРИВЕДЕННЫЕ НИЖЕ ДВЕ КНОПКИ ПОКА БЕЗ ФУНКЦИОНАЛА-->
         <button class="button">Обновить данные</button>
         <button class="button">Запуск парсера</button>
 
         <!-- Модальное окно для "ДОБАВЛЕНИЯ ПАРЫ" -->
         <div id="myModal1" class="modal">
-            <div class="modal-content"> 
-                <span class="close" id="closeModal1">&times;</span>
+            <div class="modal-content", id="modalContentAdd"> 
+                <span class="close" id="closeModalAdd">&times;</span>
+                <p style="font-size: 20px;">Добавление пары</p>
 
                 <form id="modalForm">
                     <label for="teacher">Фамилия преподователя:</label>
@@ -87,15 +79,16 @@
                         <option value="Одноразовый">Одноразовый</option>
                         <option value="Еженедельный">Еженедельный</option>
                     </select>
-                    <button type="submit" class="sendbutton">Отправить</button>
+                    <button type="submit" class="sendbutton" id="submitAddPair">Отправить</button>
                 </form>
             </div>
         </div>
 
         <!--Модальное окно для "УДАЛЕНИЯ ПАРЫ"-->
         <div id="myModal2" class="modal">
-            <div class="modal-content"> 
-                <span class="close" id="closeModal2">&times;</span>
+            <div class="modal-content", id="modalContentDel"> 
+                <span class="close" id="closeModalDel">&times;</span>
+                <p style="font-size: 20px;">Удаление пары</p>
 
                 <form id="modalForm">
                     <label for="teacher">Фамилия преподователя:</label>
@@ -137,7 +130,7 @@
                         <option value="1">одну</option>
                         <option value="все">все</option>
                     </select>
-                    <button type="submit" class="sendbutton">Отправить</button>
+                    <button type="submit" class="sendbutton" id="submitDelPair">Отправить</button>
                 </form>
             </div>
         </div>
@@ -148,17 +141,21 @@
         // Для добавления пары
         var modal1 = document.getElementById("myModal1");
         var add = document.getElementById('addPair');
-        var span1 = document.getElementById('closeModal1');
-        
+        var span1 = document.getElementById('closeModalAdd');
+        var modalContentAdd = document.getElementById('modalContentAdd');
+
         // Для удаления пары
         var modal2 = document.getElementById("myModal2");
         var del = document.getElementById('deletePair');
-        var span2 = document.getElementById('closeModal2');
+        var span2 = document.getElementById('closeModalDel');
+        var modalContentDel = document.getElementById('modalContentDel');
 
         // Для изменения пары
         var replace = document.getElementById('replacePair');
 
         add.onclick = function() {
+            modalContentAdd.classList.add('modal-center');
+            modalContentAdd.classList.remove('modal-left', 'modal-right');
             modal1.style.display = 'block';
         }
 
@@ -167,6 +164,8 @@
         }
 
         del.onclick = function() {
+            modalContentDel.classList.add('modal-center');
+            modalContentDel.classList.remove('modal-left', 'modal-right');
             modal2.style.display = 'block';
         }
 
@@ -175,8 +174,12 @@
         }
 
         replace.onclick = function() {
-            modal1.style.display = 'block';
+            modalContentDel.classList.remove('modal-center');
+            modalContentDel.classList.add('modal-left');
+            modalContentAdd.classList.remove('modal-center');
+            modalContentAdd.classList.add('modal-right');
             modal2.style.display = 'block';
+            modal1.style.display = 'block';
         }
 
         document.getElementById("openLinkButton").onclick = function() {
