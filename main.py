@@ -1,7 +1,6 @@
 import json
 
 from fastapi import FastAPI, Body
-from fastapi.responses import HTMLResponse
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 import uvicorn
@@ -43,6 +42,11 @@ def get_occup_pair(body=Body()):
 @app.get("/")
 def root():
     return FileResponse("static/index.html")
+
+
+@app.get("/sync")
+def sync_db():
+    print('sync')
 
 
 # @app.get("/StyleSheet.css")

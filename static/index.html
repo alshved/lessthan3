@@ -19,6 +19,7 @@
         <button class="button" id="replacePair">Изменить пару</button>
         <button class="button" id="openLinkButton">Гугл календарь</button>
         <button class="button" id="occupancy">Занятость кабинета</button>
+        <button class="button" id="sync">Синхронизировать с базой данных</button>
 
         <!--ПРИВЕДЕННЫЕ НИЖЕ ДВЕ КНОПКИ ПОКА БЕЗ ФУНКЦИОНАЛА-->
         <button class="button">Обновить данные</button>
@@ -436,6 +437,13 @@
         var span4 = document.getElementById("closeOccupancy");
         var close_replace_pair_btn = document.getElementById("replace-pair-btn");
         console.log(close_replace_pair_btn);
+
+        var sync_btn = document.getElementById("sync");
+        sync_btn.addEventListener("click", function () {
+            const response = fetch("/sync", {
+                method: "GET"
+            })
+        })
 
         add.addEventListener("click", open_mw_add_pair);
         span1.addEventListener("click", close_mw_add_pair);
