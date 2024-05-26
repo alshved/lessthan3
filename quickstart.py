@@ -92,8 +92,8 @@ class GoogleApi:
 
     # Удаляем пару из google календаря, передаём на вход словарь с информацией о паре
     def delete_one_pair(self, pair):
-        id = self.s.get_id(pair["cabinet"], pair["time_start"], pair["date"])
-        event = self.service.events().delete(calendarId=CALENDARID, eventId=id).execute()
+        event_id = self.s.get_id(pair["cabinet"], pair["time_start"], pair["date"])
+        event = self.service.events().delete(calendarId=CALENDARID, eventId=event_id).execute()
         print(event)
 
     # Обновляем информацию о паре, на вход передаются два словаря один с информацией о старой паре второй о новой

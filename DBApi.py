@@ -196,6 +196,14 @@ class DataBase:
         except sqlite3.Error as error:
             print(f"Ошибка при ID: {error}")
 
+    def select_all(self):
+        try:
+            data = self.cursor.execute(f"SELECT * FROM Class").fetchall()
+            res = [DataBase.__from_tuple_to_dict(i) for i in data]
+            return res
+        except sqlite3.Error as error:
+            print(f"Ошибка выбора: {error}")
+
     @staticmethod
     def __from_tuple_to_dict(input_tuple: tuple) -> dict:
         return {

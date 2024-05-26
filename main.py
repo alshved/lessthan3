@@ -100,9 +100,14 @@ def root():
     return FileResponse("static/index.html")
 
 
-@app.get("/sync")
+@app.put("/sync")
 def sync_db():
-    print('sync')
+    db = DataBase("LessonsDB.db")
+    data = db.select_all()
+    for pair in data:
+        # если нет google-id, то значит пары нет в гугл календаре
+        if pair['google_id'] is None:
+            google_api.load_one_pair(pair)
 
 
 if __name__ == "__main__":

@@ -19,11 +19,7 @@
         <button class="button" id="replacePair">Изменить пару</button>
         <button class="button" id="openLinkButton">Гугл календарь</button>
         <button class="button" id="occupancy">Занятость кабинета</button>
-        <button class="button" id="sync">Синхронизировать с базой данных</button>
-
-        <!--ПРИВЕДЕННЫЕ НИЖЕ ДВЕ КНОПКИ ПОКА БЕЗ ФУНКЦИОНАЛА-->
-        <button class="button">Обновить данные</button>
-        <button class="button">Запуск парсера</button>
+        <button class="button" id="sync">Синхронизировать гугл календарь с базой данных</button>
 
         <!--Занятость кабинета-->
         <div id="myModal3" class="modal">
@@ -448,7 +444,7 @@
         var sync_btn = document.getElementById("sync");
         sync_btn.addEventListener("click", function () {
             const response = fetch("/sync", {
-                method: "GET"
+                method: "PUT"
             })
         })
 
