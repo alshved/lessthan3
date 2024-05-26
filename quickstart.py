@@ -18,7 +18,6 @@ def load_weekly_schedule(start, finish):
         pairs = s.load_lessons_by_dates(start, finish)
         for pair in pairs:
             load_one_pair(pair)
-            delete_one_pair(pair)
 
     except HttpError as error:
         print(f"An error occurred: {error}")
