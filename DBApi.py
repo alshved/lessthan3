@@ -2,15 +2,14 @@ import sqlite3
 import json
 
 
-class data_base:
+class DataBase:
     def __init__(self, path: str):
         self.path = path
         try:
             self.connection = sqlite3.connect(path)
             self.cursor = self.connection.cursor()
         except sqlite3.Error as error:
-            print("Ошибка подключения")
-            return 1
+            print(f"Ошибка подключения: {error}")
         self.validation_cabinet = [f"it-{i}" for i in range(1, 18)] + ["320", "322"]
 
     def add_from_json(self, path: str):
@@ -37,8 +36,7 @@ class data_base:
                             ),
                         )
                     except sqlite3.Error as error:
-                        print("Ошибка добавление кабинета")
-                        return 1
+                        print(f"Ошибка добавление кабинета: {error}")
         self.connection.commit()
 
     def create_table(self):
@@ -46,14 +44,20 @@ class data_base:
             self.cursor.execute(
                 "SELECT name FROM sqlite_master WHERE type='table' AND name='Class'"
             )
-            if self.cursor.fetchone() == None:
+            if self.cursor.fetchone() is None:
                 self.cursor.execute(
-                    'CREATE TABLE "Class" ("Cabinet"	TEXT NOT NULL, "Group "	NUMERIC, "Teacher"	TEXT NOT NULL, "TimeStart"	TEXT NOT NULL, "TimeFinish"	TEXT NOT NULL, "Name" TEXT NOT NULL, "Date" TEXT NOT NULL, "GoogleID" TEXT UNIQUE, "Regularity"	BIT, "Type"	BIT)'
+                    'CREATE TABLE "Class" ("Cabinet" TEXT NOT NULL, '
+                    '"Group " NUMERIC, "Teacher" TEXT NOT NULL, '
+                    '"TimeStart" TEXT NOT NULL, "TimeFinish" TEXT NOT NULL, '
+                    '"Name" TEXT NOT NULL, "Date" TEXT NOT NULL, '
+                    '"GoogleID" TEXT UNIQUE, '
+                    '"Regularity" BIT, '
+                    '"Type"	BIT)'
                 )
                 self.connection.commit()
                 return True
         except sqlite3.Error as error:
-            print("Ошибка получения")
+            print(f"Ошибка получения: {error}")
             return False
         return False
 
@@ -61,32 +65,30 @@ class data_base:
         try:
             self.cursor.execute("DROP table if exists Class")
         except sqlite3.Error as error:
-            print("Ошибка удаления таблицы")
-            return 1
+            print(f"Ошибка удаления таблицы: {error}")
 
     def select_something(self, request: str):
         try:
             self.cursor.execute(f"SELECT {request} FROM Class")
             return self.cursor.fetchall()
         except sqlite3.Error as error:
-            print("Ошибка выбора")
-            return 1
+            print(f"Ошибка выбора: {error}")
 
     def add_lesson(
-        self,
-        cabinet: str,
-        group: int,
-        teacher: str,
-        time_start: str,
-        time_end: str,
-        name: str,
-        date: str,
-        regularity: bool,
+            self,
+            cabinet: str,
+            group: int,
+            teacher: str,
+            time_start: str,
+            time_end: str,
+            name: str,
+            date: str,
+            regularity: bool,
     ) -> bool:
         try:
             if (
-                not self.is_lesson_in_table(cabinet, time_start, date)
-                and cabinet in self.validation_cabinet
+                    not self.is_lesson_in_table(cabinet, time_start, date)
+                    and cabinet in self.validation_cabinet
             ):
                 self.cursor.execute(
                     "INSERT INTO Class VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
@@ -105,7 +107,7 @@ class data_base:
                 self.connection.commit()
                 return True
         except sqlite3.Error as error:
-            print("Ошибка добавления")
+            print(f"Ошибка добавления: {error}")
             return False
         return False
 
@@ -117,23 +119,22 @@ class data_base:
             )
             self.connection.commit()
         except sqlite3.Error as error:
-            print("Ошибка удаления пары")
-            return 1
+            print(f"Ошибка удаления пары: {error}")
 
     def is_lesson_in_table(self, cabinet, time_start, date) -> bool:
         try:
             return (
-                len(
-                    self.cursor.execute(
-                        "SELECT Cabinet, TimeStart, Date FROM Class WHERE Cabinet = ? AND TimeStart = ? AND Date = ?",
-                        (cabinet, time_start, date),
-                    ).fetchall()
-                )
-                > 0
+                    len(
+                        self.cursor.execute(
+                            "SELECT Cabinet, TimeStart, Date FROM Class WHERE Cabinet = ? "
+                            "AND TimeStart = ? AND Date = ?",
+                            (cabinet, time_start, date),
+                        ).fetchall()
+                    )
+                    > 0
             )
         except sqlite3.Error as error:
-            print("Ошибка выбора")
-            return None
+            print(f"Ошибка выбора:{error}")
 
     def get_lesson(self, cabinet, time_start, date):
         try:
@@ -142,9 +143,9 @@ class data_base:
                 (cabinet, time_start, date),
             ).fetchall()
             if len(row) > 0:
-                return data_base.__from_tuple_to_dict(row[0])
+                return DataBase.__from_tuple_to_dict(row[0])
         except sqlite3.Error as error:
-            print("Ошибка выбора")
+            print(f"Ошибка выбора:{error}")
             return None
         return None
 
@@ -156,8 +157,7 @@ class data_base:
             )
             self.connection.commit()
         except sqlite3.Error as error:
-            print("Ошибка обновления")
-            return 1
+            print(f"Ошибка обновления: {error}")
 
     def load_lessons_by_dates(self, date_start, date_finish):
         data_from = date_start
@@ -171,39 +171,40 @@ class data_base:
             return None
         res = []
         for lesson in db_data:
-            res.append(data_base.__from_tuple_to_dict(lesson))
+            res.append(DataBase.__from_tuple_to_dict(lesson))
         return res
 
-    def add_id(self, cabinet, time_start, date, ID):
+    def add_id(self, cabinet, time_start, date, google_id):
         try:
             self.cursor.execute(
                 "UPDATE Class SET GoogleID = ? WHERE Cabinet = ? AND TimeStart = ? AND Date = ?",
-                (ID, cabinet, time_start, date),
+                (google_id, cabinet, time_start, date),
             )
             self.connection.commit()
         except sqlite3.Error as error:
-            print("Ошибка при ID")
+            print(f"Ошибка при ID:{error}")
 
-    def get_id(self, cabinet, time_start, date, ID):
+    def get_id(self, cabinet, time_start, date):
         try:
             return self.cursor.execute(
                 "SELECT GoogleID FROM Class WHERE Cabinet = ? AND TimeStart = ? AND Date = ?",
                 (cabinet, time_start, date),
             ).fetchall()[0][0]
         except sqlite3.Error as error:
-            print("Ошибка при ID")
+            print(f"Ошибка при ID: {error}")
 
-    def __from_tuple_to_dict(tuple: tuple) -> dict:
+    @staticmethod
+    def __from_tuple_to_dict(input_tuple: tuple) -> dict:
         return {
-            "cabinet": tuple[0],
-            "group": tuple[1],
-            "teacher": tuple[2],
-            "time_start": tuple[3],
-            "time_finish": tuple[4],
-            "subject": tuple[5],
-            "date": tuple[6],
-            "regularity": tuple[7],
-            "type": tuple[8],
+            "cabinet": input_tuple[0],
+            "group": input_tuple[1],
+            "teacher": input_tuple[2],
+            "time_start": input_tuple[3],
+            "time_finish": input_tuple[4],
+            "subject": input_tuple[5],
+            "date": input_tuple[6],
+            "regularity": input_tuple[7],
+            "type": input_tuple[8],
         }
 
     def __del__(self):
