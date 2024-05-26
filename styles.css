@@ -217,7 +217,7 @@ input, select {
 .left-section, .right-section {
 margin-top: 0px; /* Добавляем отступ сверху */
 float: left; /* Размещаем блоки слева и справа */
-width: 50%; /* Задаем одинаковую ширину для обоих блоков */
+width: 48%; /* Задаем одинаковую ширину для обоих блоков */
 }
 
 .left-section label, .right-section label {
