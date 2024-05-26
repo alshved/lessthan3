@@ -10,7 +10,7 @@ class DataBase:
             self.cursor = self.connection.cursor()
         except sqlite3.Error as error:
             print(f"Ошибка подключения: {error}")
-        self.validation_cabinet = [f"it-{i}" for i in range(1, 18)] + ["320", "322"]
+        self.validation_cabinet = [f"it-{i}" for i in range(1, 18)] + ["ГУК Б-320", "ГУК Б-322"]
 
     def add_from_json(self, path: str):
         with open(path, encoding="utf-8") as f:
