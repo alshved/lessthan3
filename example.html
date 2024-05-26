@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Модальное окно с вертикальной разделяющей полосой</title>
-<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Модальное окно с вертикальной разделяющей полосой</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
@@ -19,7 +19,7 @@
         <button class="button" id="replacePair">Изменить пару</button>
         <button class="button" id="openLinkButton">Гугл календарь</button>
         <button class="button" id="occupancy">Занятость кабинета</button>
-        
+
         <!--ПРИВЕДЕННЫЕ НИЖЕ ДВЕ КНОПКИ ПОКА БЕЗ ФУНКЦИОНАЛА-->
         <button class="button">Обновить данные</button>
         <button class="button">Запуск парсера</button>
@@ -57,7 +57,7 @@
                         <option value="322">322</option>
                     </select>
                     <label for="date">Выбор даты:</label>
-                    <input type="date" id="date" name="date"required>
+                    <input type="date" id="date" name="date" required>
                     <button type="submit" class="sendbutton">Отправить</button>
                 </form>
             </div>
@@ -65,7 +65,7 @@
 
         <!-- Модальное окно для "ДОБАВЛЕНИЯ ПАРЫ" -->
         <div id="myModal1" class="modal">
-            <div class="modal-content"> 
+            <div class="modal-content">
                 <span class="close" id="closeModalAdd">&times;</span>
                 <p style="font-size: 20px;">Добавление пары</p>
 
@@ -103,7 +103,7 @@
                         <option value="322">322</option>
                     </select>
                     <label for="date">Выбор даты:</label>
-                    <input type="date" id="date" name="date"required>
+                    <input type="date" id="date" name="date" required>
                     <label for="type">Выбор типа:</label>
                     <select name="type" id="type" required>
                         <option value="Одноразовый">Одноразовый</option>
@@ -116,7 +116,7 @@
 
         <!--Модальное окно для "УДАЛЕНИЯ ПАРЫ"-->
         <div id="myModal2" class="modal">
-            <div class="modal-content"> 
+            <div class="modal-content">
                 <span class="close" id="closeModalDel">&times;</span>
                 <p style="font-size: 20px;">Удаление пары</p>
 
@@ -163,14 +163,14 @@
                     <button type="submit" class="sendbutton">Отправить</button>
                 </form>
             </div>
-        </div> 
+        </div>
 
         <!-- МОДАЛЬНОЕ ОКНО ДЛЯ ИЗМЕНЕНИЯ ПАРЫ-->
         <div id="modal3" class="modal">
             <div class="modal-content1">
                 <span class="close" id="closeReplace">&times;</span>
                 <div class="left-section">
-                    <p style="font-size: 20px;">Удалить пару</p>
+                    <p style="font-size: 20px;">Что меняем</p>
                     <form id="modalForm">
                         <label for="teacher">Фамилия преподователя:</label>
                         <input type="text" id="teacher" name="teacher" required>
@@ -205,7 +205,7 @@
                             <option value="322">322</option>
                         </select>
                         <label for="date">Выбор даты:</label>
-                        <input type="date" id="date" name="date"required>
+                        <input type="date" id="date" name="date" required>
                         <label for="type">Выбор типа:</label>
                         <select name="type" id="type" required>
                             <option value="Одноразовый">Одноразовый</option>
@@ -215,7 +215,7 @@
                 </div>
 
                 <div class="right-section">
-                    <p style="font-size: 20px;">Добавить пару</p>
+                    <p style="font-size: 20px;">На что меняем</p>
                     <form id="modalForm">
                         <label for="teacher">Фамилия преподователя:</label>
                         <input type="text" id="teacher" name="teacher" required>
@@ -258,7 +258,7 @@
                         </select>
                     </form>
                 </div>
-            <button type="submit" class="sendbutton">Отправить</button>
+                <button type="submit" class="sendbutton">Отправить</button>
             </div>
         </div>
     </div>
@@ -269,7 +269,7 @@
         var modal1 = document.getElementById("myModal1");
         var add = document.getElementById('addPair');
         var span1 = document.getElementById('closeModalAdd');
-        
+
         // Для удаления пары
         var modal2 = document.getElementById("myModal2");
         var del = document.getElementById('deletePair');
@@ -285,53 +285,83 @@
         var occup = document.getElementById("occupancy")
         var span4 = document.getElementById("closeOccupancy")
 
-        add.onclick = function() {
+        function open_mw_add_pair() {
             modal1.style.display = 'block';
+            var form = document.querySelector("#myModal1 > div > form");
+            var teacher = form.querySelector("#teacher");
+            var subject = form.querySelector("#subject");
+            var group = form.querySelector("#group");
+            var start_time = form.querySelector("#start-time");
+            var end_time = form.querySelector("#end-time");
+            var cab = form.querySelector(#room);
+
+            const response = fetch("/add_pair", {
+                method: "PUT",
+                body: JSON.stringify({
+                    teacher: teacher.value,
+                    subject: subject.value,
+                    cabinet: cab.value,
+                    start_time: start_time.value,
+                    end_time: end_time.value
+                })
+            })
         }
 
-        span1.onclick = function() {
+        function close_mw_add_pair() {
             modal1.style.display = 'none';
         }
 
-        del.onclick = function() {
+        function open_mw_delete_pair() {
             modal2.style.display = 'block';
         }
 
-        span2.onclick = function() {
+        function close_mw_delete_pair() {
             modal2.style.display = 'none';
         }
 
-        replace.onclick = function() {
+        function open_mw_replace_pair() {
             modal3.style.display = 'block';
         }
 
-        span3.onclick = function() {
+        function close_mw_replace_pair() {
             modal3.style.display = 'none';
         }
 
-        occup.onclick = function() {
+        function open_mw_replace_occup() {
             modal4.style.display = 'block';
         }
 
-        span4.onclick = function() {
+        function close_mw_replace_occup() {
             modal4.style.display = 'none';
         }
 
-        document.getElementById("openLinkButton").onclick = function() {
+        add.addEventListener("click", open_mw_add_pair);
+        span1.addEventListener("click", close_mw_add_pair);
+
+        del.addEventListener("click", open_mw_delete_pair);
+        span2.addEventListener("click", close_mw_delete_pair);
+
+        replace.addEventListener("click", open_mw_replace_pair);
+        span3.addEventListener("click", close_mw_replace_pair);
+
+        occup.addEventListener("click", open_mw_replace_occup);
+        span4.addEventListener("click", close_mw_replace_occup);
+
+        document.getElementById("openLinkButton").onclick = function () {
             window.open("https://calendar.google.com/calendar/u/0?cid=ZjI1MzQ0ZTI2NDlkOTY3Yzc4NTY2YTA2MWEwNmZhZTY0OTBhMTYyYzlhN2I2NzhlNjFlNjE3MWYxZmFjMzdjMEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t");
         }
 
-    window.onclick = function(event) {
-        if (event.target == modal1) {
-            modal1.style.display = 'none';
-        } else if (event.target == modal2) {
-            modal2.style.display = 'none';
-        } else if (event.target == modal3) {
-            modal3.style.display ='none';
-        } else if (event.target == modal4) {
-            modal4.style.display ='none';
+        window.onclick = function (event) {
+            if (event.target == modal1) {
+                modal1.style.display = 'none';
+            } else if (event.target == modal2) {
+                modal2.style.display = 'none';
+            } else if (event.target == modal3) {
+                modal3.style.display = 'none';
+            } else if (event.target == modal4) {
+                modal4.style.display = 'none';
+            }
         }
-    }
 
     </script>
 
