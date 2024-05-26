@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="6b1311f6-241e-4dba-9993-92a2feec53ea" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scraper/8i1cМ8О-110Б-23g1w.json" beforeDir="false" afterPath="$PROJECT_DIR$/scraper/8i1cМ8О-110Б-23g1w.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scraper/scraperMAIShedule.py" beforeDir="false" afterPath="$PROJECT_DIR$/scraper/scraperMAIShedule.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -28,19 +27,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.cli.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.scraperMAIShedule.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;scraper&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/univer/prog/it-project/lessthan3/scraper/scraperMAIShedule.py&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.cli.executor": "Run",
+    "Python.main.executor": "Run",
+    "Python.scraperMAIShedule.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "scraper",
+    "last_opened_file_path": "D:/univer/prog/it-project/lessthan3/scraper",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
-}</component>
-  <component name="RunManager" selected="Python.scraperMAIShedule">
+}]]></component>
+  <component name="RunManager" selected="Python.main">
     <configuration name="cli" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="it-project" />
       <option name="ENV_FILES" value="" />
