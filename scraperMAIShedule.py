@@ -244,6 +244,7 @@ class SheduleScraperMAI:
         :param institute: номер требуемого института
         :param course: номер требуемого курса
         :return: список строк с названиями доступных групп. Если групп нет, то список будет пустой
+        :param try_cache: если True, то сначала данные будут искаться в кэше
         """
 
         data_path = path.join(self.cache_dir, f'{institute}i{course}c')
