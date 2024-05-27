@@ -21,6 +21,11 @@ app.mount("/static", StaticFiles(directory="static", html=True), name="static")
 
 @app.put("/add_pair")
 def add_pair(body=Body()):
+    """
+    Функция для обработки запроса с сайта о добавлении пары в базу данных и гугл календарь
+    :param body: тело запроса
+    :return: None
+    """
     data = json.loads(body)
     db = DataBase("LessonsDB.db")
     print(data)
@@ -40,6 +45,11 @@ def add_pair(body=Body()):
 
 @app.put("/delete_pair")
 def delete_pair(body=Body()):
+    """
+    Функция для обработки запроса с сайта об удалении пары в базе данных и гугл календаре
+    :param body: тело запроса
+    :return: None
+    """
     data = json.loads(body)
     print(data)
     pair = dict()
@@ -57,6 +67,11 @@ def delete_pair(body=Body()):
 
 @app.put("/replace_pair")
 def replace_pair(body=Body()):
+    """
+    Функция для обработки запроса с сайта об изменении пары в базе данных и гугл календаре.
+    :param body: тело запроса
+    :return: None
+    """
     data = json.loads(body)
     print(data)
     pair_old = dict()
@@ -88,6 +103,11 @@ def replace_pair(body=Body()):
 
 @app.put("/get_occup")
 def get_occup_pair(body=Body()):
+    """
+    Функция для обработк запроса с сайта о занятости какого-либо кабинета.
+    :param body: тело запроса
+    :return: None
+    """
     data = json.loads(body)
     print(data)
     db = DataBase("LessonsDB.db")
@@ -102,6 +122,14 @@ def root():
 
 @app.put("/sync")
 def sync_db():
+    """
+    Функция для синхронизации базы данных и гугл календаря.
+    :return: None
+    """
+
+    # Ищет в базе данных пары, которые не опубликованы в гугл календаре (у таких пар нет google_id),
+    # и добавляет их в гугл календарь.
+    
     db = DataBase("LessonsDB.db")
     data = db.select_all()
     for pair in data:
