@@ -115,9 +115,6 @@ class DataBase:
         return False
 
     def delete_lesson(self, cabinet, time_start, date):
-        date = date.replace('-', '.')
-        if not self.is_lesson_in_table(cabinet, time_start, date):
-            raise sqlite3.Error
         try:
             self.cursor.execute(
                 "DELETE FROM Class WHERE Cabinet = ? AND TimeStart = ? AND Date = ?",

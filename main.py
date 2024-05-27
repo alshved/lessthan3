@@ -1,5 +1,4 @@
 import json
-import sqlite3
 
 from fastapi import FastAPI, Body
 from fastapi.responses import FileResponse, Response, JSONResponse
@@ -93,21 +92,12 @@ def replace_pair(body=Body()):
     pair_new['teacher'] = data['teacher_after']
     pair_new['group'] = data['group_after']
 
+    google_api.update_one_pair(pair_old, pair_new)
     db = DataBase("LessonsDB.db")
-    try:
-        db.delete_lesson(data['cabinet_before'], data['start_time_before'], data['date_before'])
-    except sqlite3.Error:
-        return Response(content="get_occup", media_type="text/plain", status_code=500)
-
+    db.delete_lesson(data['cabinet_before'], data['start_time_before'], data['date_before'])
     db.add_lesson(data['cabinet_after'], data['group_after'], data['teacher_after'],
                   data['start_time_after'], data['end_time_after'], data['subject_after'], data['date_after'],
                   data['type'] == 'one')
-    print("s")
-    try:
-        google_api.update_one_pair(pair_old, pair_new)
-    except IndexError:
-        print('s')
-        return Response(content="get_occup", media_type="text/plain", status_code=500)
     print("succesfully replaced")
 
 
@@ -139,7 +129,7 @@ def sync_db():
 
     # Ищет в базе данных пары, которые не опубликованы в гугл календаре (у таких пар нет google_id),
     # и добавляет их в гугл календарь.
-
+    
     db = DataBase("LessonsDB.db")
     data = db.select_all()
     for pair in data:
