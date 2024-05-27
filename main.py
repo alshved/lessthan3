@@ -30,12 +30,12 @@ def add_pair(body=Body()):
     db = DataBase("LessonsDB.db")
     print(data)
     db.add_lesson(data['cabinet'], data['group'], data['teacher'],
-                  data['start_time'], data['end_time'], data['subject'], data['date'],
+                  data['start_time'], data['end_time'], data['subject'], data['date'].replace('-', '.'),
                   data['type'] == 'one')
     pair = dict()
     pair['subject'] = data['subject']
     pair['cabinet'] = data['cabinet']
-    pair['date'] = data['date']
+    pair['date'] = data['date'].replace('-', '.')
     pair['time_start'] = data['start_time']
     pair['time_finish'] = data['end_time']
     pair['teacher'] = data['teacher']
@@ -55,14 +55,14 @@ def delete_pair(body=Body()):
     pair = dict()
     pair['subject'] = data['subject']
     pair['cabinet'] = data['cabinet']
-    pair['date'] = data['date']
+    pair['date'] = data['date'].replace('-', '.')
     pair['time_start'] = data['start_time']
     pair['time_finish'] = data['end_time']
     pair['teacher'] = data['teacher']
     pair['group'] = data['group']
     google_api.delete_one_pair(pair)
     db = DataBase("LessonsDB.db")
-    db.delete_lesson(data['cabinet'], data['start_time'], data['date'])
+    db.delete_lesson(data['cabinet'], data['start_time'], data['date'].replace('-', '.'))
 
 
 @app.put("/replace_pair")
@@ -77,7 +77,7 @@ def replace_pair(body=Body()):
     pair_old = dict()
     pair_old['subject'] = data['subject_before']
     pair_old['cabinet'] = data['cabinet_before']
-    pair_old['date'] = data['date_before']
+    pair_old['date'] = data['date_before'].replace('-', '.')
     pair_old['time_start'] = data['start_time_before']
     pair_old['time_finish'] = data['end_time_before']
     pair_old['teacher'] = data['teacher_before']
@@ -86,7 +86,7 @@ def replace_pair(body=Body()):
     pair_new = dict()
     pair_new['subject'] = data['subject_after']
     pair_new['cabinet'] = data['cabinet_after']
-    pair_new['date'] = data['date_after']
+    pair_new['date'] = data['date_after'].replace('-', '.')
     pair_new['time_start'] = data['start_time_after']
     pair_new['time_finish'] = data['end_time_after']
     pair_new['teacher'] = data['teacher_after']
@@ -94,9 +94,9 @@ def replace_pair(body=Body()):
 
     google_api.update_one_pair(pair_old, pair_new)
     db = DataBase("LessonsDB.db")
-    db.delete_lesson(data['cabinet_before'], data['start_time_before'], data['date_before'])
+    db.delete_lesson(data['cabinet_before'], data['start_time_before'], data['date_before'].replace('-', '.'))
     db.add_lesson(data['cabinet_after'], data['group_after'], data['teacher_after'],
-                  data['start_time_after'], data['end_time_after'], data['subject_after'], data['date_after'],
+                  data['start_time_after'], data['end_time_after'], data['subject_after'], data['date_after'].replace('-', '.'),
                   data['type'] == 'one')
     print("succesfully replaced")
 
@@ -111,7 +111,7 @@ def get_occup_pair(body=Body()):
     data = json.loads(body)
     print(data)
     db = DataBase("LessonsDB.db")
-    res = db.is_lesson_in_table(data['cabinet'], data['start_time'], data['date'])
+    res = db.is_lesson_in_table(data['cabinet'], data['start_time'], data['date'].replace('-', '.'))
     return Response(content="get_occup", media_type="text/plain", headers={"result": str(res)})
 
 
