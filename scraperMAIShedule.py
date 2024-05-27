@@ -264,21 +264,3 @@ class SheduleScraperMAI:
         with open(data_path, 'w', encoding='utf-8') as fp:
             json.dump(res, fp, ensure_ascii=False, indent=2)
         return res
-
-    # пока непонянто, надо это или нет. Функция для скраппинга ВСЕХ институтов, ВСЕХ групп, ВСЕХ недель
-    # def update_all(self):
-    #     print(self._driver)
-    #     available_inst = self.scrap_available_institutes(try_cache=True)
-    #     available_courses = self.scrap_available_courses(try_cache=True)
-    #     available_weeks = self.scrap_available_weeks(try_cache=True)
-    #     print(available_weeks)
-    #     # input()
-    #     print("start")
-    #     for inst in available_inst:
-    #         for course in available_courses:
-    #             groups = self.scrap_available_groups(inst, course)
-    #             print(groups)
-    #             for g in groups:
-    #                 for week in available_weeks:
-    #                     print(inst, course, g, week)
-    #                     self.scrap_by_group_and_week(inst, g, week, course, try_cache=True)

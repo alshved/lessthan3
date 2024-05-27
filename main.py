@@ -112,12 +112,5 @@ def sync_db():
 
 if __name__ == "__main__":
     # поставить reload=False для прода
-    uvicorn.run("main:app", reload=True)
+    uvicorn.run("main:app", reload=False)
     google_api = GoogleApi()
-# @app.get("/StyleSheet.css")
-# def get_css():
-#     return FileResponse("StyleSheet.css")#
-# @app.get("/main.js")
-# def get_js():
-#     print("s")
-#     return FileResponse("main.js")
