@@ -134,7 +134,7 @@ def sync_db():
     data = db.select_all()
     for pair in data:
         # если нет google-id, то значит пары нет в гугл календаре
-        if pair['google_id'] is None:
+        if not pair['google_id']:
             google_api.load_one_pair(pair)
 
 
