@@ -1,0 +1,90 @@
+{
+  "Пн": {
+    "lessons": [
+      {
+        "subject": "Экономическая теория",
+        "subject_type": "ПЗ",
+        "time_start": "10:45",
+        "time_end": "12:15",
+        "teachers": [
+          "Помулева Наталья Сергеевна"
+        ],
+        "cabinet": "ГУК А-208 "
+      }
+    ],
+    "date": "2024.06.03"
+  },
+  "Вт": {
+    "lessons": [
+      {
+        "subject": "Дискретная математика",
+        "subject_type": "ЛР",
+        "time_start": "09:00",
+        "time_end": "10:30",
+        "teachers": [
+          "Смерчинская Светлана Олеговна"
+        ],
+        "cabinet": "ГУК А-504 "
+      },
+      {
+        "subject": "Дискретная математика",
+        "subject_type": "ЛР",
+        "time_start": "10:45",
+        "time_end": "12:15",
+        "teachers": [
+          "Смерчинская Светлана Олеговна"
+        ],
+        "cabinet": "ГУК А-504 "
+      }
+    ],
+    "date": "2024.06.04"
+  },
+  "Ср": {
+    "lessons": [
+      {
+        "subject": "Физическая культура",
+        "subject_type": "ПЗ",
+        "time_start": "10:45",
+        "time_end": "12:15",
+        "teachers": [],
+        "cabinet": "--каф. "
+      }
+    ],
+    "date": "2024.06.05"
+  },
+  "Чт": {
+    "lessons": [
+      {
+        "subject": "Математический анализ",
+        "subject_type": "ЛК",
+        "time_start": "09:00",
+        "time_end": "10:30",
+        "teachers": [],
+        "cabinet": "ГУК Б-649 "
+      },
+      {
+        "subject": "Дискретная математика",
+        "subject_type": "ЛК",
+        "time_start": "13:00",
+        "time_end": "14:30",
+        "teachers": [
+          "Нефедов Виктор Николаевич"
+        ],
+        "cabinet": "ГУК В-214 "
+      },
+      {
+        "subject": "Физическая культура",
+        "subject_type": "ПЗ",
+        "time_start": "14:45",
+        "time_end": "16:15",
+        "teachers": [],
+        "cabinet": "--каф. "
+      }
+    ],
+    "date": "2024.06.06"
+  },
+  "week": "03.06.2024-09.06.2024",
+  "group": "М8О-101Б-23",
+  "inst": "8",
+  "course": "1"
+}
