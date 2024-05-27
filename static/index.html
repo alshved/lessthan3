@@ -10,7 +10,8 @@
 
     <img src="https://www.newstaff.ru/2023/11/17/1521655b9e77ea3f390b41f5ec89f3f10a67cb59.jpg" alt="" class="image1">
     <img src="https://i2.wp.com/miro.medium.com/1*29NeeIGT0BElEBNfzE_VlQ.jpeg" alt="" class="image2">
-
+    <img src="https://get.pxhere.com/photo/grass-bird-wing-white-farm-meadow-wildlife-beak-fauna-duck-goose-vertebrate-waterfowl-water-bird-canard-country-life-domestic-goose-ducks-geese-and-swans-848808.jpg" alt="Гусь" class="imageGoose">
+    
     <!--ЦЕНТРАЛЬНО ОКНО-->
     <div class="container">
         <h1>Что-то странное</h1>
@@ -167,7 +168,7 @@
             <div class="modal-content1">
                 <span class="close" id="closeReplace">&times;</span>
                 <div class="left-section">
-                    <p style="font-size: 20px;">На что меняем</p>
+                    <p style="font-size: 20px;">Что меняем</p>
                     <form id="modalForm">
                         <label for="teacher">Фамилия преподователя:</label>
                         <input type="text" id="teacher" name="teacher" required>
@@ -203,16 +204,16 @@
                         </select>
                         <label for="date">Выбор даты:</label>
                         <input type="date" id="date" name="date" required>
-                        <label for="type">Выбор типа:</label>
-                        <select name="type" id="type" required>
-                            <option value="one_time">Одноразовый</option>
-                            <option value="every_week">Еженедельный</option>
+                        <label for="del">Сколько пар удалить:</label>
+                        <select name="del" id="del" required>
+                            <option value="one">одну</option>
+                            <option value="all">все</option>
                         </select>
                     </form>
                 </div>
 
                 <div class="right-section">
-                    <p style="font-size: 20px;">Что меняем</p>
+                    <p style="font-size: 20px;">На что меняем</p>
                     <form id="modalForm">
                         <label for="teacher">Фамилия преподователя:</label>
                         <input type="text" id="teacher" name="teacher" value="" required>
@@ -248,10 +249,10 @@
                         </select>
                         <label for="date">Выбор даты:</label>
                         <input type="date" id="date" name="date" required>
-                        <label for="del">Сколько пар удалить:</label>
-                        <select name="del" id="del" required>
-                            <option value="one">одну</option>
-                            <option value="all">все</option>
+                        <label for="type">Выбор типа:</label>
+                        <select name="type" id="type" required>
+                            <option value="one_time">Одноразовый</option>
+                            <option value="every_week">Еженедельный</option>
                         </select>
                     </form>
                 </div>
@@ -331,10 +332,10 @@
 
         function open_mw_replace_pair() {
             modal3.style.display = 'block';
-            let form1 = modal3.querySelector("div + div").querySelector("div > form");
-            let form2 = modal3.querySelector("div > div > form");
+            let form1 = modal3.querySelector("div > div > form");
+            let form2 = modal3.querySelector("div + div").querySelector("div > form");
             
-            var submit_btn = modal3.querySelector("div > .sendbutton")
+            var submit_btn = modal3.querySelector("#replace-pair-btn")
             submit_btn.onclick = function () {
                 //получаем инфу о том, что удаляем
                 var teacher1 = form1.querySelector("#teacher");
@@ -378,6 +379,12 @@
                         type: type.value
                     })
                 })
+
+                response.then(function (value) {
+                    if (value.status != 200) {
+                        alert("Такой пары не существует в календаре");
+                    }
+                });                
             }
         }
 
